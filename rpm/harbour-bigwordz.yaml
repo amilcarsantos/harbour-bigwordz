@@ -1,0 +1,31 @@
+Name: harbour-bigwordz
+Summary: Displays words on the screen in large letters.
+Version: 0.1
+Release: 1
+Group: Qt/Qt
+URL: http://example.org/
+License: BSD
+Sources:
+- '%{name}-%{version}.tar.bz2'
+Description: |-
+  Displays words on the screen, in large letters, for Sailfish OS.
+  Use theme, black/white or custom colors. Also write new words or use one from history.
+Configure: none
+Builder: qtc5
+PkgConfigBR:
+- Qt5Quick
+- Qt5Qml
+- Qt5Core
+- sailfishapp >= 0.0.10
+Requires:
+- sailfishsilica-qt5 >= 0.10.9
+Files:
+- /usr/share/icons/hicolor/86x86/apps
+- /usr/share/applications
+- /usr/share/harbour-bigwordz
+- /usr/bin
+- '%{_datadir}/icons/hicolor/86x86/apps/%{name}.png'
+- '%{_datadir}/applications/%{name}.desktop'
+- '%{_datadir}/%{name}/qml'
+- '%{_bindir}'
+PkgBR: []

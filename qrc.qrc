@@ -1,0 +1,5 @@
+<RCC>
+	<qresource prefix="/">
+		<file>harbour-bigwordz.png</file>
+	</qresource>
+</RCC>
