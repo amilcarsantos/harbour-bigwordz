@@ -83,6 +83,29 @@ Page {
 			Component.onCompleted: headerContainer.parent = header
 		}
 
+		PullDownMenu {
+			MenuItem {
+				function restoreControls() {
+					listView.enabled = true
+				}
+				enabled: storedWordsModel.count > 0
+				text: qsTr("Delete All")
+				onClicked: {
+					// 1st) block user iteraction with listview
+					listView.enabled = false;
+					// start remorse action
+					remorsePopup.execute(qsTr("Deleting all stored words"), function() {
+						while (listModel.count > 0) {
+							listModel.remove(listModel.count - 1)
+						}
+						storedWordsModel.removeAll()
+						restoreControls()
+					})
+					remorsePopup.canceled.connect(restoreControls)
+				}
+			}
+		}
+
 		delegate: ListItem {
 			id: delegate
 			menu: contextMenu
@@ -131,6 +154,10 @@ Page {
 			}
 		}
 		VerticalScrollDecorator {}
+	}
+
+	RemorsePopup {
+		id: remorsePopup
 	}
 
 	ListModel {

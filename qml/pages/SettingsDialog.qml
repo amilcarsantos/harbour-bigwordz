@@ -49,17 +49,19 @@ Dialog {
 			window.colorScheme = "custom"
 			window.customSchemeColors = textColorPicker.color.toString() + backColorPicker.color.toString()
 		}
+		window.tap2toggle = tap2toggle.checked
+		window.startWithStoredWord = startWithStoredWord.checked
+		window.useSensors = useSensors.checked
 	}
 
-	Flickable {
+	SilicaFlickable {
 		id: flick
-		width: parent.width
-		height: parent.height
 		anchors.fill: parent
 		contentHeight: column.height
 		Column {
 			id: column
-			anchors.fill: parent
+			width: parent.width
+//			anchors.fill: parent
 
 			function setColorScheme(type) {
 				themeColors.checked = type === "theme"
@@ -67,7 +69,6 @@ Dialog {
 				customColors.checked = type === "custom"
 				textColorPicker.enabled = customColors.checked
 				backColorPicker.enabled = customColors.checked
-		//		colorsLabel.text = colorsLabel.text + type.substring(0,1)
 			}
 
 			Component.onCompleted: {
@@ -93,6 +94,7 @@ Dialog {
 
 			Label {
 				id: colorsLabel
+				x: Theme.paddingSmall
 				font.pixelSize: Theme.fontSizeLarge
 				text: qsTr("Text colors")
 			}
@@ -143,24 +145,25 @@ Dialog {
 				text: qsTr("General")
 			}
 			TextSwitch {
+				id: startWithStoredWord
+				text: qsTr("Start with latest stored word")
+				description: qsTr("Next restart the initial word is the latest stored word")
+				checked: window.startWithStoredWord
+			}
+			TextSwitch {
 				id: tap2toggle
 				text: qsTr("Double tap to toggle full screen")
-				description: qsTr("Double tap over the words to swicth between full screen and edit mode")
+				description: qsTr("Double tap over the words to swicth between edit mode and full screen")
 				checked: window.tap2toggle
-				onCheckedChanged: {
-					window.tap2toggle = tap2toggle.checked
-				}
 			}
-/* TODO
 			TextSwitch {
 				id: useSensors
-				text: "Toogle Full Screen with Sensors"
-				description: "Use accelerometer to switch between full screen and edit mode"
-				onCheckedChanged: {
-					window.useSensors = useSensors.checked
-				}
-			}*/
+				text: "Toogle full screen with sensors"
+				description: "Set the screen vertically to switch from edit mode to full screen"
+				checked: window.useSensors
+			}
 		}
+		VerticalScrollDecorator {}
 	}
 }
 

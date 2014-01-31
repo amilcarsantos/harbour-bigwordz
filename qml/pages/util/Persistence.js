@@ -26,11 +26,12 @@ function setting(settingName, defaultValue) {
 			value = rs.rows.item(0).value
 		}
 	});
+//	console.log("setting '" + settingName + "' value: " + value);
 	return value;
 }
 
 function stringToBoolean(str) {
-	switch(str.toLowerCase()) {
+	switch(str.toString().toLowerCase()) {
 	case "true": case "yes": case "1":
 		return true;
 	case "false": case "no": case "0": case null:
@@ -103,5 +104,18 @@ function removeStoredWord(text) {
 		}
 	});
 //	console.log("removeStoredWord '" + currentText + "' result: " + res);
+	return res;
+}
+
+function removeAllStoredWords() {
+	var res = "";
+	database().transaction(function(tx) {
+		res = "OK";
+		var rs = tx.executeSql('DELETE FROM storedWords');
+		if (rs.rowsAffected === 0) {
+			res = "Error";
+		}
+	});
+//	console.log("removeAllStoredWords() res: ", res);
 	return res;
 }

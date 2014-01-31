@@ -30,7 +30,7 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-//import QtSensors 5.0
+import QtSensors 5.0
 
 Page {
 	id: mainPage
@@ -51,9 +51,21 @@ Page {
 		words.focus = true
 	}
 
+	Component.onCompleted: {
+		window.initialUpdate.connect(function() {
+			// initial update
+			wordsBoxHeight = mainPage.width
+			wordsBoxWidth = mainPage.width
+			inputText.text = window.currentText
+			flick.updateWords()
+		})
+	}
 
 	SilicaFlickable {
+		id: flick
 		anchors.fill: parent
+
+		contentHeight: parent.height
 
 		PullDownMenu {
 			MenuItem {
@@ -82,277 +94,305 @@ Page {
 					var page = pageStack.push(Qt.resolvedUrl("StoredWordsPage.qml"))
 					page.textChanged.connect(function() {
 						inputText.text = window.currentText
-						column.updateWords()
+						flick.updateWords()
 					})
 				}
 			}
 		}
 
-		Column {
-			id: column
+		function updateWords() {
+//			console.log("flick.updateWords() - mainH: " + mainPage.height + "; mainPage.width: " + mainPage.width)
+			if (isPortrait) {
+				words.font.pixelSize = hiddenText.calcFontSize(480)
+			} else {
+				words.font.pixelSize = hiddenText.calcFontSize(520)
+			}
+			words.text = window.currentText
+		}
 
-			width: mainPage.width
-			height: mainPage.height
+		PageHeader {
+			id: header1
+			title: appname
+		}
 
-			function updateWords() {
-//				console.log("column.updateWords() - mainH: " + mainPage.height + "; mainPage.width: " + mainPage.width)
+		MouseArea {
+			id: doubleTapDetector
+			property int clickHitX: -1
+			property int clickHitY: -1
+			enabled: window.tap2toggle
+			anchors.fill: wordsBox
+			onClicked: {
+				if (clickHitX < 0) {
+					// first click
+					clickHitX = mouse.x
+					clickHitY = mouse.y
+					doubleTapTimeout.start()
+					return
+				}
+				if (Math.abs(mouse.x - clickHitX) <= Theme.iconSizeLarge
+						&& Math.abs(mouse.y - clickHitY) <= Theme.iconSizeLarge) {
+					wordsBox.toggleFullscreen()
+				}
+				clickHitX = -1
+				clickHitY = -1
+			}
+			Timer {
+				id: doubleTapTimeout
+				interval: 800 // ms
+				running: false
+				repeat: false
+				onTriggered: {
+					parent.clickHitX = -1
+					parent.clickHitY = -1
+				}
+			}
+
+			onEnabledChanged: {
+				clickHitX = -1
+			}
+		}
+
+		Rectangle {
+			id: wordsBox
+			width: wordsBoxWidth //parent.width
+			height: wordsBoxHeight //width
+			anchors.centerIn: parent
+			color: window.backColor()
+
+			function updateHeightOnEdit() {
+//				console.log("wordsBox.updateHeightOnEdit() - orentation: " + orientation + "; rotation: " + rotation)
+				if (isFullScreen) {
+					return
+				}
+//				console.log("input y " + inputText.y + " header1++ " + (header1.y + header1.height + height))
 				if (isPortrait) {
-					words.font.pixelSize = hiddenText.calcFontSize(480)
-				} else {
-					words.font.pixelSize = hiddenText.calcFontSize(520)
-				}
-				words.text = window.currentText
-			}
-
-			Component.onCompleted: {
-				updateWords()
-			}
-
-			PageHeader {
-				id: header1
-				title: appname
-			}
-
-			MouseArea {
-				id: doubleTapDetector
-				property int clickHitX: -1
-				property int clickHitY: -1
-				enabled: window.tap2toggle
-				anchors.fill: wordsBox
-				onClicked: {
-					if (clickHitX < 0) {
-						// first click
-						clickHitX = mouse.x
-						clickHitY = mouse.y
-						doubleTapTimeout.start()
-						return
-					}
-					if (Math.abs(mouse.x - clickHitX) <= Theme.iconSizeLarge
-							&& Math.abs(mouse.y - clickHitY) <= Theme.iconSizeLarge) {
-						wordsBox.toggleFullscreen()
-					}
-					clickHitX = -1
-					clickHitY = -1
-				}
-				Timer {
-					id: doubleTapTimeout
-					interval: 800 // ms
-					running: false
-					repeat: false
-					onTriggered: {
-						parent.clickHitX = -1
-						parent.clickHitY = -1
-					}
-				}
-
-				onEnabledChanged: {
-					clickHitX = -1
-				}
-			}
-
-			Rectangle {
-				id: wordsBox
-				width: wordsBoxWidth //parent.width
-				height: wordsBoxHeight //width
-				anchors.centerIn: parent
-				color: window.backColor()
-
-				function updateHeightOnEdit() {
-//					console.log("wordsBox.updateHeightOnEdit() - orentation: " + orientation + "; rotation: " + rotation)
-					if (isFullScreen) {
-						return
-					}
-//					console.log("input y " + inputText.y + " header1++ " + (header1.y + header1.height + height))
-					if (isPortrait) {
-						if (inputText.y < (header1.y + header1.height + height)) {
-							wordsBoxHeight = inputText.y - header1.y - header1.height
-						} else {
-							wordsBoxHeight = Screen.width
-						}
-						return
-					}
-					if (isLandscape) {
-						wordsBoxHeight = Math.max(50, inputText.y - header1.y - header1.height)
-//						console.log("wordsBoxHeight: " + wordsBoxHeight)
-						return
-					}
-				}
-
-				function updateHeight() {
-//					console.log("wordsBox.updateHeight() - isFullScreen: " + isFullScreen)
-					if (isFullScreen) {
-						wordsBoxHeight = isLandscape ? Screen.width : Screen.height //mainPage.height
-						return
-					}
-					if (isLandscape) {
-						wordsBoxHeight = Math.max(50, inputText.y - header1.y - header1.height)
-//						console.log("wordsBoxHeight: " + wordsBoxHeight)
-						return
-					}
-					wordsBoxHeight = mainPage.width
-				}
-
-				function updateWitdh() {
-					if (isFullScreen) {
-						wordsBoxWidth = mainPage.width
-						return
-					}
-					wordsBoxWidth = mainPage.width
-//					console.log("wordsBox.updateWitdh() wordsBoxWidth: " + wordsBoxWidth)
-				}
-
-				function toggleFullscreen() {
-					words.focus = true		// force to close keyboard
-					isFullScreen = !isFullScreen
-					header1.visible = !isFullScreen
-					inputText.visible = !isFullScreen
-					//updateHeight()
-					lazyUpdateWords.updateWidth = true
-					lazyUpdateWords.updateHeight = true
-					lazyUpdateWords.start()
-					if (isFullScreen) {
-						storedWordsModel.storeCurrentText()
-						// remove extra caracters from input
-						if (inputText.text.lenght > window.currentText.length) {
-							inputText.text = window.currentText
-						}
-					}
-				}
-
-				Component.onCompleted: {
-					// initial update
-					wordsBoxHeight = parent.width
-					wordsBoxWidth = parent.width
-				}
-
-				Label {
-					// actual displayed words
-					id: words
-					anchors.fill: parent
-					wrapMode: Text.WordWrap
-					color: window.textColor()
-					font.bold: true
-					lineHeight: 0.95 //TODO reduce more the lineHeight and center
-
-					horizontalAlignment: Text.AlignHCenter
-					verticalAlignment: Text.AlignVCenter
-				}
-			}
-
-			TextField {
-				id: inputText
-//				text: "The quick brown fox jumps over the lazy dog"
-				text: "Hello"
-				y : parent.height - height
-				width: mainPage.width - x
-
-				onYChanged: {
-					if (isFullScreen) {
-						// isFullScreen requested while editing...
-						return
-					}
-//					console.log("inputText.onYChanged " + y)
-					wordsBox.updateHeightOnEdit()
-					lazyUpdateWords.start()		//column.updateWords()
-				}
-
-				onTextChanged: {
-//					console.log("inputText.onTextChanged")
-					if (text === window.currentText) {
-						// skip updates...
-						return
-					}
-					if (text.length > 80) {
-						window.currentText = text.substring(0,80)
-						color = 'red'
+					if (inputText.y < (header1.y + header1.height + height)) {
+						wordsBoxHeight = inputText.y - header1.y - header1.height
 					} else {
-						window.currentText = text
-						color = Theme.primaryColor
+						wordsBoxHeight = Screen.width
 					}
-
-					column.updateWords()
+					return
 				}
+				if (isLandscape) {
+					wordsBoxHeight = Math.max(50, inputText.y - header1.y - header1.height)
+//					console.log("wordsBoxHeight: " + wordsBoxHeight)
+					return
+				}
+			}
 
-				Keys.onReturnPressed: words.focus = true
-				Keys.onEnterPressed: words.focus = true
+			function updateHeight() {
+//				console.log("wordsBox.updateHeight() - isFullScreen: " + isFullScreen)
+				if (isFullScreen) {
+					wordsBoxHeight = isLandscape ? Screen.width : Screen.height //mainPage.height
+					return
+				}
+				if (isLandscape) {
+					wordsBoxHeight = Math.max(50, inputText.y - header1.y - header1.height)
+//					console.log("wordsBoxHeight: " + wordsBoxHeight)
+					return
+				}
+				wordsBoxHeight = mainPage.width
+			}
 
-				Timer {
-					// to prevent unnecessary calls to calcFontSize()
-					property bool updateWidth: false
-					property bool updateHeight: false
-					id: lazyUpdateWords
-					interval: 200
-					running: false
-					repeat: false
-					onTriggered: {
-//						console.log("lazyUpdateWords.onTriggered")
-						if (updateWidth) {
-							wordsBox.updateWitdh()
-							updateWidth = false
-						}
-						if (updateHeight) {
-							wordsBox.updateHeight()
-							updateHeight = false
-						}
-						words.font.pixelSize = 1 // forces item position update
-						column.updateWords()
+			function updateWitdh() {
+				if (isFullScreen) {
+					wordsBoxWidth = mainPage.width
+					return
+				}
+				wordsBoxWidth = mainPage.width
+//				console.log("wordsBox.updateWitdh() wordsBoxWidth: " + wordsBoxWidth)
+			}
+
+			function toggleFullscreen() {
+				words.focus = true		// force to close keyboard
+				isFullScreen = !isFullScreen
+				header1.visible = !isFullScreen
+				inputText.visible = !isFullScreen
+				//updateHeight()
+				lazyUpdateWords.updateWidth = true
+				lazyUpdateWords.updateHeight = true
+				lazyUpdateWords.start()
+				if (isFullScreen) {
+					storedWordsModel.storeCurrentText()
+					// remove extra caracters from input
+					if (inputText.text.lenght > window.currentText.length) {
+						inputText.text = window.currentText
 					}
 				}
 			}
 
-			Text {
-				id: hiddenText
-				visible: false
+			Label {
+				// actual displayed words
+				id: words
+				anchors.fill: parent
+				wrapMode: Text.WordWrap
+				color: window.textColor()
 				font.bold: true
-				//wrapMode: Text.WordWrap
-				lineHeight: 0.95 //TODO reduce more the lineHeight and center
+				lineHeight: 0.96 //TODO reduce more the lineHeight and center
 
+				horizontalAlignment: Text.AlignHCenter
+				verticalAlignment: Text.AlignVCenter
+			}
+		}
 
-				function calcFontSize(startSize) {
-					var h = wordsBox.height
-					var w = wordsBox.width
-					var size2 = startSize
-					var testHW = (h + w) * 1.2
+		TextField {
+			id: inputText
+//				text: "Hello"
+			y : parent.height - height
+			width: mainPage.width - x
 
-					hiddenText.text = window.currentText
-
-					hiddenText.font.pixelSize = size2
-					hiddenText.wrapMode = Text.NoWrap
-//					console.log("w: " + w + ", h:" + h + ", w.y: " + words.y +	"  --- pw: " + hiddenText.paintedWidth + ", ph:" + hiddenText.paintedHeight + "; testHW=" + testHW)
-					if (hiddenText.paintedWidth > w || hiddenText.paintedHeight > wordsBoxHeight) {
-						hiddenText.wrapMode = Text.WordWrap
-						hiddenText.width = w
-//						console.log("pw2: " + hiddenText.paintedWidth + ", ph2:" + hiddenText.paintedHeight)
-
-						while (hiddenText.paintedWidth >= w || hiddenText.paintedHeight >= h) {
-							size2 = size2  - (hiddenText.paintedHeight + hiddenText.paintedWidth > testHW ? 40 : 8)
-							hiddenText.font.pixelSize = size2
-							if (size2 < 16) {
-								break
-							}
-//							console.log("pixelSize: " + size2 + " painted W: " + hiddenText.paintedWidth + ", H: " + hiddenText.paintedHeight + "; w+h: " + (hiddenText.paintedHeight+hiddenText.paintedWidth))
-						}
-					}
-					return size2
+			onYChanged: {
+				if (isFullScreen) {
+					// isFullScreen requested while editing...
+					return
 				}
+//				console.log("inputText.onYChanged " + y)
+				wordsBox.updateHeightOnEdit()
+				lazyUpdateWords.start()
+			}
+
+			onTextChanged: {
+//				console.log("inputText.onTextChanged")
+				if (text === window.currentText) {
+					// skip updates...
+					return
+				}
+				if (text.length > 80) {
+					window.currentText = text.substring(0,80)
+					color = 'red'
+				} else {
+					window.currentText = text
+					color = Theme.primaryColor
+				}
+
+				flick.updateWords()
+			}
+
+			Keys.onReturnPressed: words.focus = true
+			Keys.onEnterPressed: words.focus = true
+
+			Timer {
+				// to prevent unnecessary calls to calcFontSize()
+				property bool updateWidth: false
+				property bool updateHeight: false
+				id: lazyUpdateWords
+				interval: 200
+				running: false
+				repeat: false
+				onTriggered: {
+//					console.log("lazyUpdateWords.onTriggered")
+					if (updateWidth) {
+						wordsBox.updateWitdh()
+						updateWidth = false
+					}
+					if (updateHeight) {
+						wordsBox.updateHeight()
+						updateHeight = false
+					}
+					words.font.pixelSize = 1 // forces item position update
+					flick.updateWords()
+				}
+			}
+		}
+
+		Text {
+			id: hiddenText
+			visible: false
+			font.bold: true
+			//wrapMode: Text.WordWrap
+			lineHeight: 0.95 //TODO reduce more the lineHeight and center
+
+
+			function calcFontSize(startSize) {
+				var h = wordsBox.height
+				var w = wordsBox.width
+				var size2 = startSize
+				var testHW = (h + w) * 1.2
+
+				hiddenText.text = window.currentText
+
+				hiddenText.font.pixelSize = size2
+				hiddenText.wrapMode = Text.NoWrap
+//				console.log("w: " + w + ", h:" + h + ", w.y: " + words.y +	"  --- pw: " + hiddenText.paintedWidth + ", ph:" + hiddenText.paintedHeight + "; testHW=" + testHW)
+				if (hiddenText.paintedWidth > w || hiddenText.paintedHeight > wordsBoxHeight) {
+					hiddenText.wrapMode = Text.WordWrap
+					hiddenText.width = w
+//					console.log("pw2: " + hiddenText.paintedWidth + ", ph2:" + hiddenText.paintedHeight)
+					while (hiddenText.paintedWidth >= w || hiddenText.paintedHeight >= h) {
+						size2 = size2  - (hiddenText.paintedHeight + hiddenText.paintedWidth > testHW ? 40 : 8)
+						hiddenText.font.pixelSize = size2
+						if (size2 < 16) {
+							break
+						}
+//						console.log("pixelSize: " + size2 + " painted W: " + hiddenText.paintedWidth + ", H: " + hiddenText.paintedHeight + "; w+h: " + (hiddenText.paintedHeight+hiddenText.paintedWidth))
+					}
+				}
+				return size2
 			}
 		}
 	}
 
-//	Accelerometer {
-//		id: accel
-//		active: true // window.useSensors
-//		dataRate: 4
-//		onReadingChanged: {
-//			console.log("=====onReadingChanged=========; x:" + reading.x + "; y: " + reading.y + "; z: "+ reading.z);
-//		}
+	Accelerometer {
+		property int posCount
+		property string posDirection
+		property bool lastToogleByAccel
 
-//		Component.onCompleted: {
-//			// TODO
-//			console.log("availableDataRates: " + availableDataRates.length  + "; v0: " + availableDataRates[0].minimum + "; " + availableDataRates[0].maximum)
-//			// from Jolla phone | availableDataRates length:1 ;...[0].minimum: 1;...[0].maximum: 1000
-//		}
-//	}
+		function calcDirection(x, y) {
+			if (x > 8.5) {
+				return "x"
+			}
+			if (x < -8.5) {
+				return "-x"
+			}
+			if (y > 8.5) {
+				return "y"
+			}
+			if (y < -8.5) {
+				return "-y"
+			}
+			return "off"
+		}
+
+		id: accel
+		active: window.useSensors && Qt.application.active
+		dataRate: 4
+		onReadingChanged: {
+//			console.log("=====onReadingChanged=========; x:" + reading.x + "; y: " + reading.y + "; z: "+ reading.z);
+
+			var direction = calcDirection(reading.x, reading.y)
+			if (direction === posDirection) {
+				if (posCount >= 0) {
+					posCount++
+				}
+			} else {
+				posCount = 0
+				posDirection = direction
+			}
+
+			if (posCount > 5) {
+				if (isFullScreen && lastToogleByAccel && posDirection === "off") {
+					// cancel fullscreen only if made by accelerometer
+					lastToogleByAccel = false
+					wordsBox.toggleFullscreen()
+				}
+				if (!isFullScreen && posDirection !== "off") {
+					// set fullscreen
+					lastToogleByAccel = true
+					posCount = -1		// "standby until posDirection change" state
+					wordsBox.toggleFullscreen()
+				}
+			}
+//			console.log("posCount: " + posCount +"; dir: " + posDirection)
+		}
+
+		onActiveChanged: {
+			if (active) {
+				posCount = 0
+				posDirection = ""
+				lastToogleByAccel = false
+			}
+		}
+	}
 }
 
 

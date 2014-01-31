@@ -38,16 +38,21 @@ ApplicationWindow
 {
 	id: window
 
-	property string version: "0.1"
+	property string version: "0.2"
 	property string appname: "Big Wordz"
 	property string appicon: "qrc:/harbour-bigwordz.png"
 	property string appurl:  "https://github.com/amilcarsantos/harbour-bigwordz"
 
-	property string currentText: "Hello"
+	property string currentText
+
+	// persistente options
 	property string colorScheme
 	property string customSchemeColors
-	property bool useSensors: false
+	property bool useSensors
 	property bool tap2toggle
+	property bool startWithStoredWord
+
+	signal initialUpdate
 
 	function textColor() {
 		if (colorScheme == "custom") {
@@ -109,9 +114,11 @@ ApplicationWindow
 			}
 			return 0
 		}
-		/*ListElement {
-			text: "Hello"
-		}*/
+
+		function removeAll() {
+			clear()
+			Persistence.removeAllStoredWords()
+		}
 	}
 
 	initialPage: Component { MainPage { } }
@@ -123,13 +130,25 @@ ApplicationWindow
 		colorScheme = Persistence.setting("colorScheme", "theme")
 		customSchemeColors = Persistence.setting("customSchemeColors", "")
 		tap2toggle = Persistence.settingBool("tap2toggle", false)
+		useSensors = Persistence.settingBool("useSensors", false)
+		startWithStoredWord = Persistence.settingBool("startWithStoredWord", false)
 		Persistence.populateStoredWords(storedWordsModel)
+
+		if (startWithStoredWord && storedWordsModel.count > 0) {
+			currentText = storedWordsModel.get(0).text
+		}
+		if (currentText === "") {
+			currentText = "Hello"	// fallback to 'Hello'
+		}
+		initialUpdate()
 	}
 
 	Component.onDestruction: {
 		Persistence.setSetting("colorScheme", colorScheme)
 		Persistence.setSetting("customSchemeColors", customSchemeColors)
 		Persistence.setSetting("tap2toggle", tap2toggle)
+		Persistence.setSetting("useSensors", useSensors)
+		Persistence.setSetting("startWithStoredWord", startWithStoredWord)
 	}
 }
 
