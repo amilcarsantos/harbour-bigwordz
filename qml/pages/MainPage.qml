@@ -31,6 +31,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtSensors 5.0
+import "util"
 
 Page {
 	id: mainPage
@@ -49,6 +50,7 @@ Page {
 		lazyUpdateWords.start()
 		// some problems while editing and changing orienation thus force to close keyboard
 		words.focus = true
+		colorSlider.fastHide()
 	}
 
 	Component.onCompleted: {
@@ -61,6 +63,16 @@ Page {
 		})
 	}
 
+	onStatusChanged: {
+		if (status === PageStatus.Activating) {
+			colorSlider.fastHide()
+		}
+	}
+
+	onIsFullScreenChanged: {
+		colorSlider.fastHide()
+	}
+
 	SilicaFlickable {
 		id: flick
 		anchors.fill: parent
@@ -69,25 +81,45 @@ Page {
 
 		PullDownMenu {
 			MenuItem {
-				text: "About"
+				text: qsTr("About")
 				onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
 			}
 			MenuItem {
-				text: "Settings"
+				text: qsTr("Settings")
 				onClicked: {
 					pageStack.push(Qt.resolvedUrl("SettingsDialog.qml"))
 				}
 			}
 			MenuItem {
-				text: "Toogle Full Screen"
+				text: qsTr("Toogle Full Screen")
 				onClicked: {
 					wordsBox.toggleFullscreen()
 					lazyUpdateWords.start()
 				}
+				enabled: inputText.text.trim().length > 0
 			}
 		}
 
 		PushUpMenu {
+			id: upMenu
+			property bool lockedScreen: false
+			onActiveChanged: {
+				lockedScreen = allowedOrientations !== Orientation.All
+			}
+
+			MenuItem {
+				text: upMenu.lockedScreen ? qsTr("Unlock Orientation") : qsTr("Lock Orientation")
+				visible: isFullScreen
+				onClicked: {
+					if (upMenu.lockedScreen) {
+						// allow ony current orientation
+						allowedOrientations = Orientation.All
+					} else {
+						// allow ony current orientation
+						allowedOrientations = orientation
+					}
+				}
+			}
 			MenuItem {
 				text: "Stored Words"
 				onClicked: {
@@ -119,9 +151,11 @@ Page {
 			id: doubleTapDetector
 			property int clickHitX: -1
 			property int clickHitY: -1
-			enabled: window.tap2toggle
 			anchors.fill: wordsBox
 			onClicked: {
+				if (!window.tap2toggle) {
+					return
+				}
 				if (clickHitX < 0) {
 					// first click
 					clickHitX = mouse.x
@@ -136,6 +170,18 @@ Page {
 				clickHitX = -1
 				clickHitY = -1
 			}
+
+			onPressAndHold: {
+				if (!isPortrait || isFullScreen
+						|| wordsBox.height < mainPage.width || colorScheme != "custom") {
+//					console.log("onPressAndHold... cancel slider")
+					colorSlider.fastHide()
+					return
+				}
+				// show/hide colors slider
+				colorSlider.toogleShowHide()
+			}
+
 			Timer {
 				id: doubleTapTimeout
 				interval: 800 // ms
@@ -158,6 +204,7 @@ Page {
 			height: wordsBoxHeight //width
 			anchors.centerIn: parent
 			color: window.backColor()
+			clip: true
 
 			function updateHeightOnEdit() {
 //				console.log("wordsBox.updateHeightOnEdit() - orentation: " + orientation + "; rotation: " + rotation)
@@ -205,6 +252,10 @@ Page {
 
 			function toggleFullscreen() {
 				words.focus = true		// force to close keyboard
+				if (inputText.text.trim().length === 0 && !isFullScreen) {
+					return
+				}
+
 				isFullScreen = !isFullScreen
 				header1.visible = !isFullScreen
 				inputText.visible = !isFullScreen
@@ -214,10 +265,9 @@ Page {
 				lazyUpdateWords.start()
 				if (isFullScreen) {
 					storedWordsModel.storeCurrentText()
-					// remove extra caracters from input
-					if (inputText.text.lenght > window.currentText.length) {
-						inputText.text = window.currentText
-					}
+				} else {
+					allowedOrientations = Orientation.All
+					upMenu.lockedScreen = false
 				}
 			}
 
@@ -235,36 +285,43 @@ Page {
 			}
 		}
 
-		TextField {
+		ColorSliderView {
+			id: colorSlider
+			height: 0
+			anchors.bottom: wordsBox.top
+			onColorSelected: {
+				// change background color (maybe in tyhe future also change text color)
+				var newColors = window.textColor() + color.toString()
+//				console.log("new colors: " + newColors)
+				window.customSchemeColors = newColors
+			}
+		}
+
+		TextFieldEx {
 			id: inputText
-//				text: "Hello"
-			y : parent.height - height
+//			y : parent.height - height
 			width: mainPage.width - x
+			anchors.bottom: parent.bottom
+			maxLength: 80
 
 			onYChanged: {
 				if (isFullScreen) {
 					// isFullScreen requested while editing...
 					return
 				}
-//				console.log("inputText.onYChanged " + y)
+//				console.log("inputText.onYChanged " + y + " / height: " + height)
 				wordsBox.updateHeightOnEdit()
 				lazyUpdateWords.start()
+				colorSlider.fastHide()
 			}
 
 			onTextChanged: {
-//				console.log("inputText.onTextChanged")
+//				console.log("inputText.onTextChanged: " + text)
 				if (text === window.currentText) {
 					// skip updates...
 					return
 				}
-				if (text.length > 80) {
-					window.currentText = text.substring(0,80)
-					color = 'red'
-				} else {
-					window.currentText = text
-					color = Theme.primaryColor
-				}
-
+				window.currentText = text
 				flick.updateWords()
 			}
 
@@ -357,7 +414,7 @@ Page {
 		active: window.useSensors && Qt.application.active
 		dataRate: 4
 		onReadingChanged: {
-//			console.log("=====onReadingChanged=========; x:" + reading.x + "; y: " + reading.y + "; z: "+ reading.z);
+//			console.log("---onReadingChanged---; x:" + reading.x + "; y: " + reading.y + "; z: "+ reading.z);
 
 			var direction = calcDirection(reading.x, reading.y)
 			if (direction === posDirection) {
@@ -369,7 +426,7 @@ Page {
 				posDirection = direction
 			}
 
-			if (posCount > 5) {
+			if (posCount > window.sensorsSensitivity) {
 				if (isFullScreen && lastToogleByAccel && posDirection === "off") {
 					// cancel fullscreen only if made by accelerometer
 					lastToogleByAccel = false
@@ -392,6 +449,11 @@ Page {
 				lastToogleByAccel = false
 			}
 		}
+	}
+
+	ScreenBlank {
+		id: screenBlank
+		suspend: upMenu.lockedScreen
 	}
 }
 

@@ -120,9 +120,22 @@ Page {
 				color: searchString.length > 0 ? (highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor)
 												: (highlighted ? Theme.highlightColor : Theme.primaryColor)
 				textFormat: Text.StyledText
-				text: Theme.highlightText(model.text, searchString, Theme.highlightColor)
-				//truncationMode: TruncationMode.Fade
-				//elide: Text.ElideRight
+				text: formatText(model.text)
+
+				function formatText(modelText) {
+					if (modelText === undefined) {
+						return ''
+					}
+
+					if (modelText.indexOf('<') >= 0) {
+						modelText = modelText.replace('<', '&lt;')
+					}
+
+					if (searchString) {
+						return Theme.highlightText(modelText, searchString, Theme.highlightColor)
+					}
+					return modelText
+				}
 			}
 			OpacityRampEffect {
 				sourceItem: label

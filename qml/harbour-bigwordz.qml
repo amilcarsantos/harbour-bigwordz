@@ -38,7 +38,7 @@ ApplicationWindow
 {
 	id: window
 
-	property string version: "0.2"
+	property string version: "0.3"
 	property string appname: "Big Wordz"
 	property string appicon: "qrc:/harbour-bigwordz.png"
 	property string appurl:  "https://github.com/amilcarsantos/harbour-bigwordz"
@@ -49,6 +49,7 @@ ApplicationWindow
 	property string colorScheme
 	property string customSchemeColors
 	property bool useSensors
+	property int sensorsSensitivity
 	property bool tap2toggle
 	property bool startWithStoredWord
 
@@ -86,7 +87,7 @@ ApplicationWindow
 		id: storedWordsModel
 
 		function storeCurrentText() {
-			if (count > 0 && get(0).text === currentText) {
+			if ((count > 0 && get(0).text === currentText) || currentText.trim().length === 0) {
 				// already stored has latest, nothing to do
 				return
 			}
@@ -131,6 +132,7 @@ ApplicationWindow
 		customSchemeColors = Persistence.setting("customSchemeColors", "")
 		tap2toggle = Persistence.settingBool("tap2toggle", false)
 		useSensors = Persistence.settingBool("useSensors", false)
+		sensorsSensitivity = Persistence.settingInt("sensorsSensitivity", 6)
 		startWithStoredWord = Persistence.settingBool("startWithStoredWord", false)
 		Persistence.populateStoredWords(storedWordsModel)
 
@@ -138,7 +140,7 @@ ApplicationWindow
 			currentText = storedWordsModel.get(0).text
 		}
 		if (currentText === "") {
-			currentText = "Hello"	// fallback to 'Hello'
+			currentText = qsTr("Hello")	// fallback to 'Hello'
 		}
 		initialUpdate()
 	}
@@ -148,8 +150,7 @@ ApplicationWindow
 		Persistence.setSetting("customSchemeColors", customSchemeColors)
 		Persistence.setSetting("tap2toggle", tap2toggle)
 		Persistence.setSetting("useSensors", useSensors)
+		Persistence.setSetting("sensorsSensitivity", sensorsSensitivity)
 		Persistence.setSetting("startWithStoredWord", startWithStoredWord)
 	}
 }
-
-

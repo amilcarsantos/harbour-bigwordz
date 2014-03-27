@@ -46,6 +46,11 @@ function settingBool(settingName, defaultValue) {
 	return stringToBoolean(value);
 }
 
+function settingInt(settingName, defaultValue) {
+	var value = setting(settingName, defaultValue)
+	return parseInt(value, 10);
+}
+
 // This function is used to update settings into the database
 function setSetting(settingName, value) {
 	var res = "";
@@ -86,7 +91,6 @@ function persistStoredWord(text) {
 //	console.log("persistStoredWord '" + currentText + "' result: " + res);
 	return res;
 }
-
 
 function updateStoredWordUsage(text) {
 	database().transaction(function(tx) {

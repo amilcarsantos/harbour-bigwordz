@@ -28,7 +28,6 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "util"
@@ -52,6 +51,7 @@ Dialog {
 		window.tap2toggle = tap2toggle.checked
 		window.startWithStoredWord = startWithStoredWord.checked
 		window.useSensors = useSensors.checked
+		window.sensorsSensitivity = sensorsSensitivity.sliderValue
 	}
 
 	SilicaFlickable {
@@ -161,6 +161,34 @@ Dialog {
 				text: "Toogle full screen with sensors"
 				description: "Set the screen vertically to switch from edit mode to full screen"
 				checked: window.useSensors
+			}
+			Slider {
+				id: sensorsSensitivity
+				enabled: useSensors.checked
+				handleVisible: useSensors.checked
+				maximumValue: 10
+				minimumValue: 2
+				stepSize: 1
+				value: window.sensorsSensitivity
+				leftMargin: Theme.itemSizeExtraSmall
+				width: parent.width
+				label: infoLabel()
+
+				function infoLabel() {
+					if (sliderValue === maximumValue) {
+						return "Slowest"
+					}
+					if (sliderValue > 6) {
+						return "Slower"
+					}
+					if (sliderValue === minimumValue) {
+						return "Fastest"
+					}
+					if (sliderValue < 6) {
+						return "Faster"
+					}
+					return "Default"
+				}
 			}
 		}
 		VerticalScrollDecorator {}

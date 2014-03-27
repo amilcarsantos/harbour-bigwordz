@@ -19,10 +19,13 @@ OTHER_FILES += qml/harbour-bigwordz.qml \
 	qml/pages/SettingsDialog.qml \
 	qml/pages/StoredWordsPage.qml \
 	qml/pages/util/ColorPickerButton.qml \
+	qml/pages/util/ColorSliderView.qml \
+	qml/pages/util/TextFieldEx.qml \
+    qml/pages/util/ScreenBlank.qml \
 	qml/pages/util/Persistence.js \
-    rpm/harbour-bigwordz.spec \
-    rpm/harbour-bigwordz.yaml \
-    harbour-bigwordz.desktop
+	rpm/harbour-bigwordz.spec \
+	rpm/harbour-bigwordz.yaml \
+	harbour-bigwordz.desktop
 
 RESOURCES += \
 	qrc.qrc
