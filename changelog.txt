@@ -1,0 +1,15 @@
+v0.3
+ - new: clear button in TextField
+ - new: lock/unlock screen orientation change and block screen blackout
+ - new: press n hold to display a color slider to change the back color
+ - new: sensors sensitivity settings
+ - fix: fullscreen with empty text
+ - fix: storing empty lines
+ - fix: lines with '<' caracters in Stored Words page
+ 
+v0.2
+ - new: toogle fullscreen with sensors
+ - new: delete all stored words
+
+v0.1
+ - initial release
