@@ -130,6 +130,14 @@ Page {
 					})
 				}
 			}
+			MenuItem {
+				text: "Store Current"
+				visible: !window.autoStoreWord && !isFullScreen
+				enabled: inputText.text.trim().length > 0 && inputText.text !== storedWordsModel.lastStoredWord()
+				onClicked: {
+					storedWordsModel.storeCurrentText()
+				}
+			}
 		}
 
 		function updateWords() {
@@ -198,6 +206,18 @@ Page {
 			}
 		}
 
+		ColorSliderView {
+			id: colorSlider
+			height: 0
+			anchors.bottom: wordsBox.top
+			onColorSelected: {
+				// change background color (maybe in tyhe future also change text color)
+				var newColors = window.textColor() + color.toString()
+//				console.log("new colors: " + newColors)
+				window.customSchemeColors = newColors
+			}
+		}
+
 		Rectangle {
 			id: wordsBox
 			width: wordsBoxWidth //parent.width
@@ -257,14 +277,13 @@ Page {
 				}
 
 				isFullScreen = !isFullScreen
-				header1.visible = !isFullScreen
-				inputText.visible = !isFullScreen
-				//updateHeight()
 				lazyUpdateWords.updateWidth = true
 				lazyUpdateWords.updateHeight = true
 				lazyUpdateWords.start()
 				if (isFullScreen) {
-					storedWordsModel.storeCurrentText()
+					if (window.autoStoreWord) {
+						storedWordsModel.storeCurrentText()
+					}
 				} else {
 					allowedOrientations = Orientation.All
 					upMenu.lockedScreen = false
@@ -282,18 +301,6 @@ Page {
 
 				horizontalAlignment: Text.AlignHCenter
 				verticalAlignment: Text.AlignVCenter
-			}
-		}
-
-		ColorSliderView {
-			id: colorSlider
-			height: 0
-			anchors.bottom: wordsBox.top
-			onColorSelected: {
-				// change background color (maybe in tyhe future also change text color)
-				var newColors = window.textColor() + color.toString()
-//				console.log("new colors: " + newColors)
-				window.customSchemeColors = newColors
 			}
 		}
 
@@ -346,6 +353,8 @@ Page {
 						wordsBox.updateHeight()
 						updateHeight = false
 					}
+					header1.visible = !isFullScreen
+					inputText.visible = !isFullScreen
 					words.font.pixelSize = 1 // forces item position update
 					flick.updateWords()
 				}

@@ -52,6 +52,7 @@ ApplicationWindow
 	property int sensorsSensitivity
 	property bool tap2toggle
 	property bool startWithStoredWord
+	property bool autoStoreWord
 
 	signal initialUpdate
 
@@ -120,6 +121,13 @@ ApplicationWindow
 			clear()
 			Persistence.removeAllStoredWords()
 		}
+
+		function lastStoredWord() {
+			if (storedWordsModel.count > 0) {
+				return storedWordsModel.get(0).text
+			}
+			return ""
+		}
 	}
 
 	initialPage: Component { MainPage { } }
@@ -134,10 +142,11 @@ ApplicationWindow
 		useSensors = Persistence.settingBool("useSensors", false)
 		sensorsSensitivity = Persistence.settingInt("sensorsSensitivity", 6)
 		startWithStoredWord = Persistence.settingBool("startWithStoredWord", false)
+		autoStoreWord = Persistence.settingBool("autoStoreWord", true)
 		Persistence.populateStoredWords(storedWordsModel)
 
-		if (startWithStoredWord && storedWordsModel.count > 0) {
-			currentText = storedWordsModel.get(0).text
+		if (startWithStoredWord) {
+			currentText = storedWordsModel.lastStoredWord()
 		}
 		if (currentText === "") {
 			currentText = qsTr("Hello")	// fallback to 'Hello'
@@ -152,5 +161,6 @@ ApplicationWindow
 		Persistence.setSetting("useSensors", useSensors)
 		Persistence.setSetting("sensorsSensitivity", sensorsSensitivity)
 		Persistence.setSetting("startWithStoredWord", startWithStoredWord)
+		Persistence.setSetting("autoStoreWord", autoStoreWord)
 	}
 }

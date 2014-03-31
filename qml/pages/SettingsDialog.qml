@@ -49,9 +49,10 @@ Dialog {
 			window.customSchemeColors = textColorPicker.color.toString() + backColorPicker.color.toString()
 		}
 		window.tap2toggle = tap2toggle.checked
-		window.startWithStoredWord = startWithStoredWord.checked
 		window.useSensors = useSensors.checked
 		window.sensorsSensitivity = sensorsSensitivity.sliderValue
+		window.startWithStoredWord = startWithStoredWord.checked
+		window.autoStoreWord = autoStoreWord.checked
 	}
 
 	SilicaFlickable {
@@ -149,6 +150,12 @@ Dialog {
 				text: qsTr("Start with latest stored word")
 				description: qsTr("Next restart the initial word is the latest stored word")
 				checked: window.startWithStoredWord
+			}
+			TextSwitch {
+				id: autoStoreWord
+				text: qsTr("Store words automatically")
+				description: qsTr("Store words when switching to full screen or only by the pull up menu")
+				checked: window.autoStoreWord
 			}
 			TextSwitch {
 				id: tap2toggle

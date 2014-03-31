@@ -1,3 +1,8 @@
+v0.3.2
+ - new: manual/auto mode to store words
+ - fix: slow box resize when exiting from full screen
+ - del: 'suspend screen saver' in lock orientation because of habour.jolla.com restrictions
+
 v0.3
  - new: clear button in TextField
  - new: lock/unlock screen orientation change and block screen blackout
