@@ -1,3 +1,11 @@
+v0.4
+ - new: favorite words zone 
+ - new: cover actions: 'shortcut to stored words page' and 'edit new words'
+ - new: translations: pt
+ - fix: empty cover when no text is available
+ - fix: full screen box above menu indicators
+ - fix: sensors fullscreen trigger is suspended when text is changed and main page is not current page
+
 v0.3.2
  - new: manual/auto mode to store words
  - fix: slow box resize when exiting from full screen

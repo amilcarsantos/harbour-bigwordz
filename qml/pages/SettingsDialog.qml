@@ -165,8 +165,8 @@ Dialog {
 			}
 			TextSwitch {
 				id: useSensors
-				text: "Toogle full screen with sensors"
-				description: "Set the screen vertically to switch from edit mode to full screen"
+				text: qsTr("Toogle full screen with sensors")
+				description: qsTr("Set the screen vertically to switch from edit mode to full screen")
 				checked: window.useSensors
 			}
 			Slider {
@@ -183,18 +183,18 @@ Dialog {
 
 				function infoLabel() {
 					if (sliderValue === maximumValue) {
-						return "Slowest"
+						return qsTr("Slowest")
 					}
 					if (sliderValue > 6) {
-						return "Slower"
+						return qsTr("Slower")
 					}
 					if (sliderValue === minimumValue) {
-						return "Fastest"
+						return qsTr("Fastest")
 					}
 					if (sliderValue < 6) {
-						return "Faster"
+						return qsTr("Faster")
 					}
-					return "Default"
+					return qsTr("Default")
 				}
 			}
 		}

@@ -38,6 +38,13 @@ Item {
 	property int maxLength: 255
 	height: _inputField.height
 
+	function forceEditFocus() {
+//		console.log("setInputFocus")
+		if (!_inputField.focus) {
+			_inputField.forceActiveFocus()
+		}
+	}
+
 	onTextChanged: {
 		_inputField.text = text
 	}

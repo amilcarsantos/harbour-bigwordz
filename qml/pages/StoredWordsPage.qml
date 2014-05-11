@@ -54,7 +54,7 @@ Page {
 		width: storedWordsPage.width
 
 		PageHeader {
-			title: qsTr("Stored Words")
+			title: qsTr("Stored words")
 		}
 
 		SearchField {
@@ -89,7 +89,7 @@ Page {
 					listView.enabled = true
 				}
 				enabled: storedWordsModel.count > 0
-				text: qsTr("Delete All")
+				text: qsTr("Delete all")
 				onClicked: {
 					// 1st) block user iteraction with listview
 					listView.enabled = false;
@@ -99,11 +99,18 @@ Page {
 							listModel.remove(listModel.count - 1)
 						}
 						storedWordsModel.removeAll()
+						favoriteWordsModel.removeAll()
 						restoreControls()
 					})
 					remorsePopup.canceled.connect(restoreControls)
 				}
 			}
+//			MenuItem {
+//				enabled: storedWordsModel.count > 0
+//				text: qsTr("Order by: Last usage")
+//				onClicked: {
+//				}
+//			}
 		}
 
 		delegate: ListItem {
@@ -137,14 +144,33 @@ Page {
 					return modelText
 				}
 			}
+			Image {
+				id: favIcon
+				anchors.top: label.top
+				anchors.right: label.right
+				source: "image://theme/icon-s-favorite"
+				opacity: 0.7
+				visible: model.isFavorite
+			}
 			OpacityRampEffect {
 				sourceItem: label
 				offset: 0.3
 				slope: 1.4
 			}
+			function addFavoriteWord() {
+				favoriteWordsModel.addFavoriteWord(model.text);
+				listModel.setProperty(model.index, "isFavorite", true)
+			}
+			function removeFavoriteWord() {
+				favoriteWordsModel.removeFavoriteWord(model.text);
+				listModel.setProperty(model.index, "isFavorite", false)
+			}
 			function deleteWord() {
 				remorseAction(qsTr("Deleting"), function() {
 					storedWordsModel.removeStoredWord(model.text)
+					if (model.isFavorite) {
+						favoriteWordsModel.removeFavoriteWord(model.text)
+					}
 					listModel.remove(index)
 				})
 			}
@@ -159,10 +185,29 @@ Page {
 			Component {
 				id: contextMenu
 				ContextMenu {
+					id: itemInfo
+					property bool isFavorite: false
+					onActiveChanged: {
+//						console.log("model.isFavorite " + model.isFavorite )
+						if (active) {
+							isFavorite = model.isFavorite
+						}
+					}
+					MenuItem {
+						text: itemInfo.isFavorite ? qsTr("Remove from favorites") : qsTr("Add to favorites")
+						enabled: favoriteWordsModel.count < 16 || itemInfo.isFavorite
+						onClicked: {
+							if (itemInfo.isFavorite) {
+								removeFavoriteWord()
+							} else {
+								addFavoriteWord()
+							}
+						}
+					}
 					MenuItem {
 						text: qsTr("Delete")
 						onClicked: deleteWord()
-					}
+					} 
 				}
 			}
 		}
@@ -178,25 +223,35 @@ Page {
 
 		function update() {
 			var words = window.storedWords()
+			var favWords = window.favoriteWords()
 
 			var filteredWords = words.filter(function (word) {
 				return word.toLowerCase().indexOf(searchString) !== -1
 			})
 			while (count > filteredWords.length) {
-			remove(filteredWords.length)
+				remove(filteredWords.length)
 			}
 			for (var index = 0; index < filteredWords.length; index++) {
+				var text = filteredWords[index]
+				var isFavorite = false
+				for (var f = 0; f < favWords.length; f++) {
+					if (text === favWords[f]) {
+						isFavorite = true
+// TODO					favWords.remove(f)
+						break;
+					}
+				}
+
 				if (index < count) {
-					setProperty(index, "text", filteredWords[index])
+					setProperty(index, "text", text)
+					setProperty(index, "isFavorite", isFavorite)
 				} else {
-					append({ "text": filteredWords[index]})
+					append({
+						"text": text,
+						"isFavorite" : isFavorite
+					})
 				}
 			}
 		}
 	}
 }
-
-
-
-
-

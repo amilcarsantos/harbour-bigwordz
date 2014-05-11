@@ -59,7 +59,20 @@ Page {
 			wordsBoxHeight = mainPage.width
 			wordsBoxWidth = mainPage.width
 			inputText.text = window.currentText
-			flick.updateWords()
+		})
+		window.onForceTextUpdate.connect(function() {
+//			console.log("onForceTextUpdate: " + window.currentText)
+			if (window.currentText === '') {
+				if (isFullScreen) {
+					wordsBox.toggleFullscreen()
+				}
+				inputText.text = ''
+				inputText.forceEditFocus();
+			} else {
+				inputText.text = window.currentText
+				wordsBox.forceActiveFocus()
+			}
+			flick.updateWords();
 		})
 	}
 
@@ -91,12 +104,12 @@ Page {
 				}
 			}
 			MenuItem {
-				text: qsTr("Toogle Full Screen")
+				text: qsTr("Toogle full screen")
 				onClicked: {
 					wordsBox.toggleFullscreen()
 					lazyUpdateWords.start()
 				}
-				enabled: inputText.text.trim().length > 0
+				enabled: inputText.hasWords()
 			}
 		}
 
@@ -108,7 +121,7 @@ Page {
 			}
 
 			MenuItem {
-				text: upMenu.lockedScreen ? qsTr("Unlock Orientation") : qsTr("Lock Orientation")
+				text: upMenu.lockedScreen ? qsTr("Unlock orientation") : qsTr("Lock orientation")
 				visible: isFullScreen
 				onClicked: {
 					if (upMenu.lockedScreen) {
@@ -121,7 +134,7 @@ Page {
 				}
 			}
 			MenuItem {
-				text: "Stored Words"
+				text: qsTr("Stored words")
 				onClicked: {
 					var page = pageStack.push(Qt.resolvedUrl("StoredWordsPage.qml"))
 					page.textChanged.connect(function() {
@@ -131,9 +144,10 @@ Page {
 				}
 			}
 			MenuItem {
-				text: "Store Current"
+				text: qsTr("Store current")
 				visible: !window.autoStoreWord && !isFullScreen
-				enabled: inputText.text.trim().length > 0 && inputText.text !== storedWordsModel.lastStoredWord()
+//				enabled: inputText.hasWords() && (inputText.text.localeCompare(storedWordsModel.lastStoredWord()) !== 0)
+				enabled: inputText.hasWords() && (inputText.text !== storedWordsModel.lastStoredWord())
 				onClicked: {
 					storedWordsModel.storeCurrentText()
 				}
@@ -152,8 +166,36 @@ Page {
 
 		PageHeader {
 			id: header1
-			title: appname
+			title: favs.visible ? "" : appname
 		}
+
+		FavoritesZone {
+			id: favs
+			anchors.top: parent.top
+			itemHeigth: Theme.itemSizeLarge
+			z: 1000
+			model: favoriteWordsModel
+			visible: model.count > 0 && isPortrait &&
+					 (!isFullScreen || wordsBox.height < Screen.height)
+			//enabled: !isFullScreen
+
+			onContextMenuRequested: {
+				colorSlider.fastHide()
+			}
+			onFavoriteSelected: {
+				if (favoriteWord === window.currentText) {
+					// skip updates...
+					return
+				}
+//				window.currentText = favoriteWord
+				inputText.text = favoriteWord
+				flick.updateWords()
+			}
+			onRemoveFromFavorites: {
+				favoriteWordsModel.removeFavoriteWord(favoriteWord)
+			}
+		}
+
 
 		MouseArea {
 			id: doubleTapDetector
@@ -225,6 +267,7 @@ Page {
 			anchors.centerIn: parent
 			color: window.backColor()
 			clip: true
+			z: upMenu.z + 1	// we want wordsBox to appear above the menu indicator and its dimmer
 
 			function updateHeightOnEdit() {
 //				console.log("wordsBox.updateHeightOnEdit() - orentation: " + orientation + "; rotation: " + rotation)
@@ -255,7 +298,6 @@ Page {
 				}
 				if (isLandscape) {
 					wordsBoxHeight = Math.max(50, inputText.y - header1.y - header1.height)
-//					console.log("wordsBoxHeight: " + wordsBoxHeight)
 					return
 				}
 				wordsBoxHeight = mainPage.width
@@ -306,10 +348,14 @@ Page {
 
 		TextFieldEx {
 			id: inputText
-//			y : parent.height - height
 			width: mainPage.width - x
 			anchors.bottom: parent.bottom
 			maxLength: 80
+			z: upMenu.z + 2
+
+			function hasWords() {
+				return inputText.text.trim().length > 0
+			}
 
 			onYChanged: {
 				if (isFullScreen) {
@@ -420,14 +466,14 @@ Page {
 		}
 
 		id: accel
-		active: window.useSensors && Qt.application.active
+		active: window.useSensors && Qt.application.active && pageStack.depth == 1
 		dataRate: 4
 		onReadingChanged: {
-//			console.log("---onReadingChanged---; x:" + reading.x + "; y: " + reading.y + "; z: "+ reading.z);
+//			console.log("---onReadingChanged--- x:" + reading.x + "; y: " + reading.y + "; z: "+ reading.z);
 
 			var direction = calcDirection(reading.x, reading.y)
 			if (direction === posDirection) {
-				if (posCount >= 0) {
+				if (posCount >= 0 && inputText.hasWords()) {
 					posCount++
 				}
 			} else {
@@ -459,11 +505,18 @@ Page {
 			}
 		}
 	}
+	Connections {
+		ignoreUnknownSignals: true
+		target: inputText
+		onTextChanged: {
+			// reset if text is being changed
+			accel.posCount = 0
+		}
+	}
 
 	ScreenBlank {
 		id: screenBlank
 		suspend: upMenu.lockedScreen
 	}
 }
-
 

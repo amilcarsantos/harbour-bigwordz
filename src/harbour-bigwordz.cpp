@@ -45,7 +45,9 @@ int main(int argc, char *argv[])
     //   - SailfishApp::pathTo(QString) to get a QUrl to a resource file
     //
     // To display the view, call "show()" (will show fullscreen on device).
-
+#if !defined(QT_NO_DEBUG)
+	qputenv("LANG", QString("pt_PT.utf8").toLocal8Bit());
+#endif
     return SailfishApp::main(argc, argv);
 }
 

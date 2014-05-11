@@ -34,9 +34,15 @@ import Sailfish.Silica 1.0
 CoverBackground {
 	Label {
 		id: coverLabel
-		text: window.currentText
+		text: {
+			if (isValid()) {
+				return window.currentText
+			}
+			return window.appname
+		}
 
 		anchors.fill: parent
+		anchors.bottomMargin: Theme.paddingLarge
 		wrapMode: Text.WordWrap
 		horizontalAlignment: Text.AlignHCenter
 		verticalAlignment: Text.AlignVCenter
@@ -44,6 +50,37 @@ CoverBackground {
 		elide: Text.ElideRight
 
 		font.pixelSize: Theme.fontSizeExtraLarge
-		color: Theme.secondaryColor
+		font.italic: !isValid()
+		color: isValid() ? Theme.secondaryColor : Theme.rgba(Theme.primaryColor, 0.3)
+
+		function isValid() {
+			return window.currentText.trim().length > 0
+		}
+	}
+	CoverActionList {
+		id: coverAction
+
+		CoverAction {
+			iconSource: "image://theme/icon-cover-search"
+			onTriggered: {
+				window.pop2MainPage()
+				var page = pageStack.push(Qt.resolvedUrl("../pages/StoredWordsPage.qml"), '', PageStackAction.Immediate);
+				page.textChanged.connect(function() {
+					window.forceTextUpdate(window.currentText)
+				})
+				window.activate();
+			}
+		}
+		CoverAction {
+			iconSource: "image://theme/icon-cover-message"
+			onTriggered: {
+				window.pop2MainPage()
+				window.forceTextUpdate('');
+				// this should accelerate the virtual keyboard animation
+//				window.pageStack.panelSize = window.pageStack.imSize
+//				window.pageStack.previousImSize = window.pageStack.imSize
+				window.activate();
+			}
+		}
 	}
 }

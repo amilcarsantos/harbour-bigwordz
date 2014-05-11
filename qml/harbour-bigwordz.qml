@@ -38,7 +38,7 @@ ApplicationWindow
 {
 	id: window
 
-	property string version: "0.3"
+	property string version: "0.4"
 	property string appname: "Big Wordz"
 	property string appicon: "qrc:/harbour-bigwordz.png"
 	property string appurl:  "https://github.com/amilcarsantos/harbour-bigwordz"
@@ -55,6 +55,7 @@ ApplicationWindow
 	property bool autoStoreWord
 
 	signal initialUpdate
+	signal onForceTextUpdate
 
 	function textColor() {
 		if (colorScheme == "custom") {
@@ -82,6 +83,25 @@ ApplicationWindow
 			words.push(storedWordsModel.get(index).text)
 		}
 		return words
+	}
+
+	function favoriteWords() {
+		var words = []
+		for (var index = 0; index < favoriteWordsModel.count; index++) {
+			words.push(favoriteWordsModel.get(index).text)
+		}
+		return words
+	}
+
+	function forceTextUpdate(text) {
+		currentText = text
+		onForceTextUpdate()
+	}
+
+	function pop2MainPage() {
+		if (pageStack.depth > 1) {
+			pageStack.pop(pageStack[0], PageStackAction.Immediate)
+		}
 	}
 
 	ListModel {
@@ -130,6 +150,37 @@ ApplicationWindow
 		}
 	}
 
+	ListModel {
+		id: favoriteWordsModel
+
+		function addFavoriteWord(word) {
+			append({ "text": word })
+			Persistence.addFavoriteWord(word)
+		}
+		function removeFavoriteWord(word) {
+			for (var index = 0; index < count; index++) {
+				if (get(index).text === word) {
+					remove(index)
+					Persistence.removeFavoriteWord(word)
+					return 1
+				}
+			}
+			return 0
+		}
+		function isFavoriteWord(word) {
+			for (var index = 0; index < count; index++) {
+				if (get(index).text === word) {
+					return 1
+				}
+			}
+			return 0
+		}
+		function removeAll() {
+			clear()
+			Persistence.removeAllFavoriteWords()
+		}
+	}
+
 	initialPage: Component { MainPage { } }
 	cover: Component { CoverPage { } }
 
@@ -144,12 +195,13 @@ ApplicationWindow
 		startWithStoredWord = Persistence.settingBool("startWithStoredWord", false)
 		autoStoreWord = Persistence.settingBool("autoStoreWord", true)
 		Persistence.populateStoredWords(storedWordsModel)
+		Persistence.populateFavoriteWords(favoriteWordsModel)
 
 		if (startWithStoredWord) {
 			currentText = storedWordsModel.lastStoredWord()
 		}
 		if (currentText === "") {
-			currentText = qsTr("Hello")	// fallback to 'Hello'
+			currentText = "Hello"	// fallback to 'Hello'
 		}
 		initialUpdate()
 	}

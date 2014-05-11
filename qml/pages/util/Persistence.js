@@ -10,10 +10,12 @@ function database() {
 function initialize() {
 	database().transaction(
 		function(tx,er) {
-			// Create the 'storedWords' table if it doesn't already exist
-			tx.executeSql('CREATE TABLE IF NOT EXISTS storedWords(words TEXT, lastUsage DATETIME DEFAULT CURRENT_TIMESTAMP)');
 			// Create the settings table if it doesn't already exist
 			tx.executeSql('CREATE TABLE IF NOT EXISTS settings(setting TEXT, value TEXT)');
+			// Create the 'storedWords' table if it doesn't already exist
+			tx.executeSql('CREATE TABLE IF NOT EXISTS storedWords(words TEXT, lastUsage DATETIME DEFAULT CURRENT_TIMESTAMP)');
+
+			tx.executeSql('CREATE TABLE IF NOT EXISTS favoriteWords(id INTEGER PRIMARY KEY AUTOINCREMENT, words TEXT, colorScheme TEXT)');
 		});
 }
 
@@ -121,5 +123,47 @@ function removeAllStoredWords() {
 		}
 	});
 //	console.log("removeAllStoredWords() res: ", res);
+	return res;
+}
+
+
+function populateFavoriteWords(model) {
+	database().readTransaction(function(tx) {
+		var rs = tx.executeSql('SELECT * FROM favoriteWords ORDER BY id');
+		for (var i = 0; i < rs.rows.length; i++) {
+			model.append({ "text": rs.rows.item(i).words });
+		}
+	});
+}
+
+function addFavoriteWord(text) {
+	database().transaction(function(tx) {
+		tx.executeSql('INSERT INTO favoriteWords (words) VALUES (?)', [text]);
+	});
+}
+
+function removeFavoriteWord(text) {
+	var res = "";
+	database().transaction(function(tx) {
+		res = "OK";
+		var rs = tx.executeSql('DELETE FROM favoriteWords WHERE words = ?', [text]);
+		if (rs.rowsAffected === 0) {
+			res = "Error";
+		}
+	});
+//	console.log("removeFavoriteWord() res: ", res);
+	return res;
+}
+
+function removeAllFavoriteWords() {
+	var res = "";
+	database().transaction(function(tx) {
+		res = "OK";
+		var rs = tx.executeSql('DELETE FROM favoriteWords');
+		if (rs.rowsAffected === 0) {
+			res = "Error";
+		}
+	});
+//	console.log("removeAllFavoriteWords() res: ", res);
 	return res;
 }
