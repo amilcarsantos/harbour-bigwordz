@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<TS version="2.0" language="zh_CN">
 <context>
     <name>AboutPage</name>
     <message>
@@ -20,37 +20,37 @@
 <context>
     <name>MainPage</name>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="97"/>
+        <location filename="../qml/pages/MainPage.qml" line="98"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="101"/>
+        <location filename="../qml/pages/MainPage.qml" line="102"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="107"/>
-        <source>Toogle full screen</source>
-        <translation>全屏开关</translation>
+        <location filename="../qml/pages/MainPage.qml" line="108"/>
+        <source>Toggle full screen</source>
+        <translation type="unfinished">全屏开关</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="124"/>
+        <location filename="../qml/pages/MainPage.qml" line="125"/>
         <source>Unlock orientation</source>
         <translation>解锁方向锁定</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="124"/>
+        <location filename="../qml/pages/MainPage.qml" line="125"/>
         <source>Lock orientation</source>
         <translation>锁定方向</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="137"/>
+        <location filename="../qml/pages/MainPage.qml" line="138"/>
         <source>Stored words</source>
         <translation>已保存的文字</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="147"/>
+        <location filename="../qml/pages/MainPage.qml" line="148"/>
         <source>Store current</source>
         <translation>保存当前</translation>
     </message>
@@ -134,13 +134,13 @@
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="163"/>
-        <source>Double tap over the words to swicth between edit mode and full screen</source>
-        <translation>双击文字来切换编辑模式和全屏模式</translation>
+        <source>Double tap over the words to switch between edit mode and full screen</source>
+        <translation type="unfinished">双击文字来切换编辑模式和全屏模式</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="168"/>
-        <source>Toogle full screen with sensors</source>
-        <translation>通过传感器开关全屏</translation>
+        <source>Toggle full screen with sensors</source>
+        <translation type="unfinished">通过传感器开关全屏</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="169"/>

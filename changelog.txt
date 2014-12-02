@@ -1,5 +1,11 @@
+v0.5
+ - new: completer
+ - new: translations: fr, de, zh_CN
+ - fix: favorite words zone appearence while changing orientation
+ - fix: some bad English
+
 v0.4
- - new: favorite words zone 
+ - new: favorite words zone
  - new: cover actions: 'shortcut to stored words page' and 'edit new words'
  - new: translations: pt
  - fix: empty cover when no text is available

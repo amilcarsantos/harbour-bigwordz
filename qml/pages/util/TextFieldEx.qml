@@ -36,6 +36,8 @@ Item {
 
 	property string text: ''
 	property int maxLength: 255
+	property alias editFocus: _inputField.focus
+
 	height: _inputField.height
 
 	function forceEditFocus() {

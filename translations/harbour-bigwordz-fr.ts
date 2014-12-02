@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="pt_PT">
+<TS version="2.0" language="fr">
 <context>
     <name>AboutPage</name>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="84"/>
         <source>Displays words on the screen with large letters.</source>
-        <translation>Mostra palavras no ecrã com letras grandes.</translation>
+        <translation>Affiche mots sur l&apos;écran avec de grandes lettres.</translation>
     </message>
 </context>
 <context>
@@ -14,7 +14,7 @@
     <message>
         <location filename="../qml/pages/util/FavoritesZone.qml" line="72"/>
         <source>Remove from favorites</source>
-        <translation>Remover dos favoritos</translation>
+        <translation>Supprimer des favoris</translation>
     </message>
 </context>
 <context>
@@ -22,37 +22,37 @@
     <message>
         <location filename="../qml/pages/MainPage.qml" line="98"/>
         <source>About</source>
-        <translation>Sobre</translation>
+        <translation>À propos</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="102"/>
         <source>Settings</source>
-        <translation>Definições</translation>
+        <translation>Paramètres</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="108"/>
         <source>Toggle full screen</source>
-        <translation>Alternar ecrã inteiro</translation>
+        <translation>Basculer plein écran</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="125"/>
         <source>Unlock orientation</source>
-        <translation>Desbloquear orientação</translation>
+        <translation>Débloquez orientation</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="125"/>
         <source>Lock orientation</source>
-        <translation>Bloquear orientação</translation>
+        <translation>Bloquez orientation</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="138"/>
         <source>Stored words</source>
-        <translation>Palavras guardadas</translation>
+        <translation>Les mots sauvegardé</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="148"/>
         <source>Store current</source>
-        <translation>Guardar actual</translation>
+        <translation>Sauvegardé actuel</translation>
     </message>
 </context>
 <context>
@@ -60,117 +60,117 @@
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="89"/>
         <source>Settings</source>
-        <translation>Definições</translation>
+        <translation>Paramètres</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="90"/>
         <source>Save</source>
-        <translation>Guardar</translation>
+        <translation>Sauver</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="93"/>
         <source>Appearance</source>
-        <translation>Aspecto</translation>
+        <translation>Apparence</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="100"/>
         <source>Text colors</source>
-        <translation>Cores das palavras</translation>
+        <translation>Couleurs de texte</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="107"/>
         <source>Theme colors</source>
-        <translation>Cores do ambiente</translation>
+        <translation>Couleurs du thème</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="116"/>
         <source>Black and white</source>
-        <translation>Preto e branco</translation>
+        <translation>Noir et blanc</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="125"/>
         <source>Customize</source>
-        <translation>Personalização</translation>
+        <translation>Personnalisation</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="134"/>
         <source>Text color</source>
-        <translation>Cor das letras</translation>
+        <translation>Couleur des lettres</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="141"/>
         <source>Background</source>
-        <translation>Cor de fundo</translation>
+        <translation>Couleur de fond</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="146"/>
         <source>General</source>
-        <translation>Geral</translation>
+        <translation>Général</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="150"/>
         <source>Start with latest stored word</source>
-        <translation>Iniciar com a última palavra guardada</translation>
+        <translation>Commencez avec le dernier mot sauvé</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="151"/>
         <source>Next restart the initial word is the latest stored word</source>
-        <translation>Usar a última palavra guardada na próxima vez que a aplicação iniciar</translation>
+        <translation>Utilisez le dernier.mot sauvé la prochaine fois que l&apos;application démarre</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="156"/>
         <source>Store words automatically</source>
-        <translation>Guardar palavras automaticamente</translation>
+        <translation>Sauvegarder automatiquement les mots</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="157"/>
         <source>Store words when switching to full screen or only by the pull up menu</source>
-        <translation>Guarda logo as palavras quando alterna para ecrã inteiro ou então só quando usar opção no menu</translation>
+        <translation>Immédiatement sauvegarder les mots lorsque vous passez en plein écran ou seulement en utilisant la barre de menus</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="162"/>
         <source>Double tap to toggle full screen</source>
-        <translation>Duplo toque para alternar ecrã inteiro</translation>
+        <translation>Double Tap pour basculer plein écran</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="163"/>
         <source>Double tap over the words to switch between edit mode and full screen</source>
-        <translation>Dar toques duplos sobre o texto para alternar entre modo edição e ecrã inteiro</translation>
+        <translation>Double tap sur les mots pour basculer entre le mode d&apos;édition et plein écran</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="168"/>
         <source>Toggle full screen with sensors</source>
-        <translation>Alternar ecrã inteiro usando sensores</translation>
+        <translation>Basculer en plein écran avec des capteurs</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="169"/>
         <source>Set the screen vertically to switch from edit mode to full screen</source>
-        <translation>Colocar o ecrã em posição vertical para alterar entre modo edição e ecrã inteiro</translation>
+        <translation>Réglez l&apos;écran verticalement pour passer du mode d&apos;édition en plein écran</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="186"/>
         <source>Slowest</source>
-        <translation>O mais lento</translation>
+        <translation>Le plus lent</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="189"/>
         <source>Slower</source>
-        <translation>Lento</translation>
+        <translation>Plus lent</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="192"/>
         <source>Fastest</source>
-        <translation>O mais rápido</translation>
+        <translation>Le plus rapide</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="195"/>
         <source>Faster</source>
-        <translation>Rápido</translation>
+        <translation>Plus vite</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="197"/>
         <source>Default</source>
-        <translation>Tempo normal</translation>
+        <translation>Temps prédéfini</translation>
     </message>
 </context>
 <context>
@@ -178,37 +178,37 @@
     <message>
         <location filename="../qml/pages/StoredWordsPage.qml" line="57"/>
         <source>Stored words</source>
-        <translation>Palavras guardadas</translation>
+        <translation>Les mots sauvegardé</translation>
     </message>
     <message>
         <location filename="../qml/pages/StoredWordsPage.qml" line="92"/>
         <source>Delete all</source>
-        <translation>Eliminar todas</translation>
+        <translation>Supprimer tous</translation>
     </message>
     <message>
         <location filename="../qml/pages/StoredWordsPage.qml" line="97"/>
         <source>Deleting all stored words</source>
-        <translation>Eliminando todas as palavras guardadas</translation>
+        <translation>Suppression de tous les mots sauvegardé</translation>
     </message>
     <message>
         <location filename="../qml/pages/StoredWordsPage.qml" line="169"/>
         <source>Deleting</source>
-        <translation>Eliminando</translation>
+        <translation>Suppression</translation>
     </message>
     <message>
         <location filename="../qml/pages/StoredWordsPage.qml" line="197"/>
         <source>Remove from favorites</source>
-        <translation>Remover dos favoritos</translation>
+        <translation>Supprimer des favoris</translation>
     </message>
     <message>
         <location filename="../qml/pages/StoredWordsPage.qml" line="197"/>
         <source>Add to favorites</source>
-        <translation>Adicionar aos favoritos</translation>
+        <translation>Ajouter aux favoris</translation>
     </message>
     <message>
         <location filename="../qml/pages/StoredWordsPage.qml" line="208"/>
         <source>Delete</source>
-        <translation>Eliminar</translation>
+        <translation>Supprimer</translation>
     </message>
 </context>
 </TS>

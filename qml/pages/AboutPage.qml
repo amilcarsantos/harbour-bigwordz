@@ -46,7 +46,7 @@ Page {
 			id: transparentBox
 			y: (flick.height - height) / 2
 			width: parent.width
-			height: parent.width
+			height: column1.height + Theme.paddingSmall
 			clip: true
 			color: 'transparent'
 
@@ -63,8 +63,8 @@ Page {
 					}
 				}
 				anchors.centerIn: parent
-				height: flick.width * 1.3
-				width: flick.width * 1.3
+				height: flick.width * 1.5
+				width: transparentBox.height * 1.5
 			}
 		}
 
@@ -116,6 +116,17 @@ Page {
 					pageStack.pop()
 				}
 			}
+			Label {
+				width: parent.width
+				font.pixelSize: Theme.fontSizeTiny
+				text: "Contributors:\n"
+					+ " - Ricardo Wilhelm\n"
+					+ " - TylerTemp"
+				anchors.horizontalCenter: parent.horizontalCenter
+				horizontalAlignment: Text.AlignHCenter
+				//verticalAlignment: Text.AlignHCenter
+				wrapMode: Text.WordWrap
+			}
 		}
-    }
+	}
 }

@@ -51,6 +51,7 @@ Page {
 		// some problems while editing and changing orienation thus force to close keyboard
 		words.focus = true
 		colorSlider.fastHide()
+		favs.orientationChange = true
 	}
 
 	Component.onCompleted: {
@@ -61,7 +62,7 @@ Page {
 			inputText.text = window.currentText
 		})
 		window.onForceTextUpdate.connect(function() {
-//			console.log("onForceTextUpdate: " + window.currentText)
+			console.log("onForceTextUpdate: " + window.currentText)
 			if (window.currentText === '') {
 				if (isFullScreen) {
 					wordsBox.toggleFullscreen()
@@ -104,7 +105,7 @@ Page {
 				}
 			}
 			MenuItem {
-				text: qsTr("Toogle full screen")
+				text: qsTr("Toggle full screen")
 				onClicked: {
 					wordsBox.toggleFullscreen()
 					lazyUpdateWords.start()
@@ -171,13 +172,23 @@ Page {
 
 		FavoritesZone {
 			id: favs
+			property bool orientationChange: false
 			anchors.top: parent.top
 			itemHeigth: Theme.itemSizeLarge
 			z: 1000
 			model: favoriteWordsModel
-			visible: model.count > 0 && isPortrait &&
-					 (!isFullScreen || wordsBox.height < Screen.height)
+			visible: checkVisibility()
 			//enabled: !isFullScreen
+			function checkVisibility() {
+				if (model.count === 0 || !isPortrait) {
+					return false;
+				}
+				if (isFullScreen && orientationChange) {
+					return false;
+				}
+				orientationChange = false
+				return wordsBox.height < Screen.height
+			}
 
 			onContextMenuRequested: {
 				colorSlider.fastHide()
@@ -188,6 +199,7 @@ Page {
 					return
 				}
 //				window.currentText = favoriteWord
+				wordsBox.forceActiveFocus()
 				inputText.text = favoriteWord
 				flick.updateWords()
 			}
@@ -229,7 +241,7 @@ Page {
 					return
 				}
 				// show/hide colors slider
-				colorSlider.toogleShowHide()
+				colorSlider.toggleShowHide()
 			}
 
 			Timer {
@@ -346,6 +358,18 @@ Page {
 			}
 		}
 
+		CompleterPopup {
+			id: completerPopup
+			anchors.bottom: wordsBox.bottom
+			model: storedWordsModel
+			disabled: storedWordsModel.count === 0 || !isPortrait || !inputText.editFocus
+			z: upMenu.z + 2
+			onTextSelected: {
+				wordsBox.forceActiveFocus()
+				inputText.text = text
+			}
+		}
+
 		TextFieldEx {
 			id: inputText
 			width: mainPage.width - x
@@ -376,6 +400,7 @@ Page {
 				}
 				window.currentText = text
 				flick.updateWords()
+				completerPopup.complete(text)
 			}
 
 			Keys.onReturnPressed: words.focus = true
@@ -447,7 +472,7 @@ Page {
 	Accelerometer {
 		property int posCount
 		property string posDirection
-		property bool lastToogleByAccel
+		property bool lastToggleByAccel
 
 		function calcDirection(x, y) {
 			if (x > 8.5) {
@@ -470,7 +495,6 @@ Page {
 		dataRate: 4
 		onReadingChanged: {
 //			console.log("---onReadingChanged--- x:" + reading.x + "; y: " + reading.y + "; z: "+ reading.z);
-
 			var direction = calcDirection(reading.x, reading.y)
 			if (direction === posDirection) {
 				if (posCount >= 0 && inputText.hasWords()) {
@@ -482,14 +506,14 @@ Page {
 			}
 
 			if (posCount > window.sensorsSensitivity) {
-				if (isFullScreen && lastToogleByAccel && posDirection === "off") {
+				if (isFullScreen && lastToggleByAccel && posDirection === "off") {
 					// cancel fullscreen only if made by accelerometer
-					lastToogleByAccel = false
+					lastToggleByAccel = false
 					wordsBox.toggleFullscreen()
 				}
 				if (!isFullScreen && posDirection !== "off") {
 					// set fullscreen
-					lastToogleByAccel = true
+					lastToggleByAccel = true
 					posCount = -1		// "standby until posDirection change" state
 					wordsBox.toggleFullscreen()
 				}
@@ -501,7 +525,7 @@ Page {
 			if (active) {
 				posCount = 0
 				posDirection = ""
-				lastToogleByAccel = false
+				lastToggleByAccel = false
 			}
 		}
 	}

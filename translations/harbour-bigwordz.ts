@@ -20,37 +20,37 @@
 <context>
     <name>MainPage</name>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="97"/>
+        <location filename="../qml/pages/MainPage.qml" line="98"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="101"/>
+        <location filename="../qml/pages/MainPage.qml" line="102"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="107"/>
-        <source>Toogle full screen</source>
+        <location filename="../qml/pages/MainPage.qml" line="108"/>
+        <source>Toggle full screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="124"/>
+        <location filename="../qml/pages/MainPage.qml" line="125"/>
         <source>Unlock orientation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="124"/>
+        <location filename="../qml/pages/MainPage.qml" line="125"/>
         <source>Lock orientation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="137"/>
+        <location filename="../qml/pages/MainPage.qml" line="138"/>
         <source>Stored words</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="147"/>
+        <location filename="../qml/pages/MainPage.qml" line="148"/>
         <source>Store current</source>
         <translation type="unfinished"></translation>
     </message>
@@ -134,12 +134,12 @@
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="163"/>
-        <source>Double tap over the words to swicth between edit mode and full screen</source>
+        <source>Double tap over the words to switch between edit mode and full screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsDialog.qml" line="168"/>
-        <source>Toogle full screen with sensors</source>
+        <source>Toggle full screen with sensors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

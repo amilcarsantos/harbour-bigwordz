@@ -38,7 +38,7 @@ ApplicationWindow
 {
 	id: window
 
-	property string version: "0.4"
+	property string version: "0.5"
 	property string appname: "Big Wordz"
 	property string appicon: "qrc:/harbour-bigwordz.png"
 	property string appurl:  "https://github.com/amilcarsantos/harbour-bigwordz"

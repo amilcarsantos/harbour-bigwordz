@@ -160,12 +160,12 @@ Dialog {
 			TextSwitch {
 				id: tap2toggle
 				text: qsTr("Double tap to toggle full screen")
-				description: qsTr("Double tap over the words to swicth between edit mode and full screen")
+				description: qsTr("Double tap over the words to switch between edit mode and full screen")
 				checked: window.tap2toggle
 			}
 			TextSwitch {
 				id: useSensors
-				text: qsTr("Toogle full screen with sensors")
+				text: qsTr("Toggle full screen with sensors")
 				description: qsTr("Set the screen vertically to switch from edit mode to full screen")
 				checked: window.useSensors
 			}
