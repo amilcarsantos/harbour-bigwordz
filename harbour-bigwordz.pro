@@ -24,14 +24,17 @@ OTHER_FILES += qml/harbour-bigwordz.qml \
 	qml/pages/StoredWordsPage.qml \
 	qml/pages/util/ColorPickerButton.qml \
 	qml/pages/util/ColorSliderView.qml \
+	qml/pages/util/CompleterPopup.qml \
 	qml/pages/util/TextFieldEx.qml \
 	qml/pages/util/ScreenBlank.qml \
 	qml/pages/util/FavoritesZone.qml \
 	qml/pages/util/Persistence.js \
+	qml/pages/util/Markup.js \
 	rpm/harbour-bigwordz.spec \
 	rpm/harbour-bigwordz.yaml \
-    translations/*.ts \
-	harbour-bigwordz.desktop
+	translations/*.ts \
+	harbour-bigwordz.desktop \
+	rpm/harbour-bigwordz.changes
 
 RESOURCES += \
 	qrc.qrc
@@ -39,4 +42,7 @@ RESOURCES += \
 # to disable building translations every time, comment out the
 # following CONFIG line
 CONFIG += sailfishapp_i18n
-TRANSLATIONS += translations/harbour-bigwordz-pt.ts
+TRANSLATIONS += translations/harbour-bigwordz-pt.ts \
+	translations/harbour-bigwordz-de.ts \
+	translations/harbour-bigwordz-zh.ts \
+	translations/harbour-bigwordz-fr.ts

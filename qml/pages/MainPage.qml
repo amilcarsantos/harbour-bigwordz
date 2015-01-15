@@ -32,6 +32,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtSensors 5.0
 import "util"
+import "util/Markup.js" as Markup
 
 Page {
 	id: mainPage
@@ -162,7 +163,11 @@ Page {
 			} else {
 				words.font.pixelSize = hiddenText.calcFontSize(520)
 			}
-			words.text = window.currentText
+			if (window.markupWord) {
+				words.text = Markup.marked(window.currentText);
+			} else {
+				words.text = window.currentText
+			}
 		}
 
 		PageHeader {
@@ -446,7 +451,11 @@ Page {
 				var size2 = startSize
 				var testHW = (h + w) * 1.2
 
-				hiddenText.text = window.currentText
+				if (window.markupWord) {
+					hiddenText.text = Markup.marked(window.currentText);
+				} else {
+					hiddenText.text = window.currentText;
+				}
 
 				hiddenText.font.pixelSize = size2
 				hiddenText.wrapMode = Text.NoWrap

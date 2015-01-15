@@ -75,11 +75,11 @@ BackgroundItem {
 		searchTimer.startSearch(reset);
 	}
 
-//	Rectangle {
-//		anchors.fill: parent
-//		color: Theme.highlightBackgroundColor
-//		opacity: 0.3
-//	}
+	Rectangle {
+		anchors.fill: parent
+		color: Theme.highlightBackgroundColor
+		opacity: 0.1
+	}
 
 	Image {
 		anchors.top: parent.top
@@ -102,13 +102,11 @@ BackgroundItem {
 			if (text === undefined) {
 				return ''
 			}
-
-			if (text.indexOf('<') >= 0) {
-				text = text.replace('<', '&lt;')
-			}
-
 			if (highlightText) {
 				return Theme.highlightText(text, highlightText, Theme.highlightColor)
+			}
+			if (text.indexOf('<') >= 0) {
+				text = text.replace('<', '&lt;')
 			}
 			return text
 		}

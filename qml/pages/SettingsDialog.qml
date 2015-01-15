@@ -53,6 +53,7 @@ Dialog {
 		window.sensorsSensitivity = sensorsSensitivity.sliderValue
 		window.startWithStoredWord = startWithStoredWord.checked
 		window.autoStoreWord = autoStoreWord.checked
+		window.markupWord = markupWord.checked
 	}
 
 	SilicaFlickable {
@@ -156,6 +157,12 @@ Dialog {
 				text: qsTr("Store words automatically")
 				description: qsTr("Store words when switching to full screen or only by the pull up menu")
 				checked: window.autoStoreWord
+			}
+			TextSwitch {
+				id: markupWord
+				text: qsTr("Enable short text styling markup")
+				description: qsTr("Allows usage of symbols to apply style to the text")
+				checked: window.markupWord
 			}
 			TextSwitch {
 				id: tap2toggle

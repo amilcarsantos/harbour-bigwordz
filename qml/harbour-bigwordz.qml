@@ -38,7 +38,7 @@ ApplicationWindow
 {
 	id: window
 
-	property string version: "0.5"
+	property string version: "0.6"
 	property string appname: "Big Wordz"
 	property string appicon: "qrc:/harbour-bigwordz.png"
 	property string appurl:  "https://github.com/amilcarsantos/harbour-bigwordz"
@@ -53,6 +53,7 @@ ApplicationWindow
 	property bool tap2toggle
 	property bool startWithStoredWord
 	property bool autoStoreWord
+	property bool markupWord
 
 	signal initialUpdate
 	signal onForceTextUpdate
@@ -187,13 +188,15 @@ ApplicationWindow
 	Component.onCompleted: {
 		// init Persistence
 		Persistence.initialize()
-		colorScheme = Persistence.setting("colorScheme", "theme")
+//		colorScheme = Persistence.setting("colorScheme", "theme")
+		colorScheme = Persistence.setting("colorScheme", "blackWhite") // "je suis charlie" edition
 		customSchemeColors = Persistence.setting("customSchemeColors", "")
 		tap2toggle = Persistence.settingBool("tap2toggle", false)
 		useSensors = Persistence.settingBool("useSensors", false)
 		sensorsSensitivity = Persistence.settingInt("sensorsSensitivity", 6)
 		startWithStoredWord = Persistence.settingBool("startWithStoredWord", false)
 		autoStoreWord = Persistence.settingBool("autoStoreWord", true)
+		markupWord = Persistence.settingBool("markupWord", true)
 		Persistence.populateStoredWords(storedWordsModel)
 		Persistence.populateFavoriteWords(favoriteWordsModel)
 
@@ -201,7 +204,8 @@ ApplicationWindow
 			currentText = storedWordsModel.lastStoredWord()
 		}
 		if (currentText === "") {
-			currentText = "Hello"	// fallback to 'Hello'
+//			currentText = "Hello"	// fallback to 'Hello'
+			currentText = "JE SUIS ***CHARLIE***";				// "je suis charlie" edition
 		}
 		initialUpdate()
 	}
@@ -214,5 +218,6 @@ ApplicationWindow
 		Persistence.setSetting("sensorsSensitivity", sensorsSensitivity)
 		Persistence.setSetting("startWithStoredWord", startWithStoredWord)
 		Persistence.setSetting("autoStoreWord", autoStoreWord)
+		Persistence.setSetting("markupWord", markupWord)
 	}
 }

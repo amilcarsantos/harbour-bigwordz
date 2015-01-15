@@ -1,10 +1,18 @@
-v0.5
+# * date Author's Name <author's email> version-release
+# - Summary of changes
+
+* Tue Jan 13 2015 Amilcar Santos <amilcar.santos@gmail.com> 0.6-1
+ - new: default text 'JE SUIS CHARLIE'
+ - new: short markup styling text
+ - fix: calling function in 'long-press to show color slider to change background'
+
+* Tue Dec 02 2014 Amilcar Santos <amilcar.santos@gmail.com> 0.5-1
  - new: completer
  - new: translations: fr, de, zh_CN
  - fix: favorite words zone appearence while changing orientation
  - fix: some bad English
 
-v0.4
+* Mon May 12 2014 Amilcar Santos <amilcar.santos@gmail.com> 0.4-1
  - new: favorite words zone
  - new: cover actions: 'shortcut to stored words page' and 'edit new words'
  - new: translations: pt
@@ -12,23 +20,23 @@ v0.4
  - fix: full screen box above menu indicators
  - fix: sensors fullscreen trigger is suspended when text is changed and main page is not current page
 
-v0.3.2
+* Mon Mar 31 2014 Amilcar Santos <amilcar.santos@gmail.com> 0.3-2
  - new: manual/auto mode to store words
  - fix: slow box resize when exiting from full screen
  - del: 'suspend screen saver' in lock orientation because of habour.jolla.com restrictions
 
-v0.3
+* Tue Mar 18 2014 Amilcar Santos <amilcar.santos@gmail.com> 0.3-1
  - new: clear button in TextField
  - new: lock/unlock screen orientation change and block screen blackout
- - new: press n hold to display a color slider to change the back color
+ - new: press n hold to display a color slider to change background
  - new: sensors sensitivity settings
  - fix: fullscreen with empty text
  - fix: storing empty lines
  - fix: lines with '<' caracters in Stored Words page
- 
-v0.2
+
+* Tue Jan 31 2014 Amilcar Santos <amilcar.santos@gmail.com> 0.2-1
  - new: toogle fullscreen with sensors
  - new: delete all stored words
 
-v0.1
+* Wed Jan 15 2014 Amilcar Santos <amilcar.santos@gmail.com> 0.1-1
  - initial release

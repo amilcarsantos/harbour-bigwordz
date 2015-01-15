@@ -63,7 +63,7 @@ SlideshowView {
 		autoHide.stop()
 	}
 
-	function toogleShowHide() {
+	function toggleShowHide() {
 		if (height > 0) {
 			showHideAnim.to = 0
 		} else {
