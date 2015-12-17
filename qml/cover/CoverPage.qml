@@ -30,15 +30,14 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "../pages/util/Markup.js" as Markup
 
 CoverBackground {
 	Label {
 		id: coverLabel
 		text: {
 			if (isValid()) {
-				if (window.markupWord) {
-					return Markup.marked(window.currentText)
+				if (window.currentMarkupText) {
+					return window.currentMarkupText;
 				} else {
 					return window.currentText
 				}

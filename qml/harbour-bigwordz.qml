@@ -38,13 +38,17 @@ ApplicationWindow
 {
 	id: window
 
-	property string version: "0.6"
+	property string version: "0.7"
 	property string appname: "Big Wordz"
-	property string appicon: "qrc:/harbour-bigwordz.png"
+	property string appicon: "image://theme/harbour-bigwordz"
 	property string appurl:  "https://github.com/amilcarsantos/harbour-bigwordz"
 
 	property string currentText
+	property string currentMarkupText
+	property string currentMarkupBgText
 
+	property bool _saveColors: false
+	property bool _set: false
 	// persistente options
 	property string colorScheme
 	property string customSchemeColors
@@ -204,20 +208,37 @@ ApplicationWindow
 			currentText = storedWordsModel.lastStoredWord()
 		}
 		if (currentText === "") {
-//			currentText = "Hello"	// fallback to 'Hello'
-			currentText = "JE SUIS ***CHARLIE***";				// "je suis charlie" edition
+			currentText = "#rnd_ltrs#Hello##"	// fallback to 'Hello'
 		}
 		initialUpdate()
+		_set = true
 	}
 
 	Component.onDestruction: {
-		Persistence.setSetting("colorScheme", colorScheme)
-		Persistence.setSetting("customSchemeColors", customSchemeColors)
-		Persistence.setSetting("tap2toggle", tap2toggle)
-		Persistence.setSetting("useSensors", useSensors)
-		Persistence.setSetting("sensorsSensitivity", sensorsSensitivity)
-		Persistence.setSetting("startWithStoredWord", startWithStoredWord)
-		Persistence.setSetting("autoStoreWord", autoStoreWord)
-		Persistence.setSetting("markupWord", markupWord)
+		if (_saveColors) {
+			Persistence.setSetting("colorScheme", colorScheme)
+			Persistence.setSetting("customSchemeColors", customSchemeColors)
+		}
+	}
+
+	onColorSchemeChanged: _saveColors = true;
+	onCustomSchemeColorsChanged: _saveColors = true;
+	onTap2toggleChanged: {
+		if (_set) Persistence.setSetting("tap2toggle", tap2toggle)
+	}
+	onUseSensorsChanged: {
+		if (_set) Persistence.setSetting("useSensors", useSensors)
+	}
+	onSensorsSensitivityChanged: {
+		if (_set) Persistence.setSetting("sensorsSensitivity", sensorsSensitivity)
+	}
+	onStartWithStoredWordChanged: {
+		if (_set) Persistence.setSetting("startWithStoredWord", startWithStoredWord)
+	}
+	onAutoStoreWordChanged: {
+		if (_set) Persistence.setSetting("autoStoreWord", autoStoreWord)
+	}
+	onMarkupWordChanged: {
+		if (_set) Persistence.setSetting("markupWord", markupWord)
 	}
 }

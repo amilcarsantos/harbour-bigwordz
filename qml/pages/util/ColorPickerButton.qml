@@ -44,8 +44,10 @@ BackgroundItem {
 		spacing: Theme.paddingMedium
 		Rectangle {
 			id: colorIndicator
-			width: Theme.itemSizeSmall
-			height: parent.height
+			anchors.verticalCenter: parent.verticalCenter
+			width: Theme.itemSizeExtraSmall
+			height: Math.max(parent.height - Theme.paddingSmall, Theme.itemSizeExtraSmall)
+
 			color: "#e60003"
 			opacity: root.enabled ? 1.0 : 0.4
 		}

@@ -1,6 +1,11 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* Thu Dec 17 2015 Amilcar Santos <amilcar.santos@gmail.com> 0.7-1
+ - new: short markup color styling (and 'rnd_ltrs' function)
+ - new: short markup blink styling
+ - fix: load/save settings
+
 * Tue Jan 13 2015 Amilcar Santos <amilcar.santos@gmail.com> 0.6-1
  - new: default text 'JE SUIS CHARLIE'
  - new: short markup styling text

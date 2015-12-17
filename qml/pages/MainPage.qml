@@ -164,8 +164,14 @@ Page {
 				words.font.pixelSize = hiddenText.calcFontSize(520)
 			}
 			if (window.markupWord) {
-				words.text = Markup.marked(window.currentText);
+				var marked = Markup.marked(window.currentText);
+				window.currentMarkupText = marked.text;
+				window.currentMarkupBgText = marked.bgText;
+				words.text = marked.text;
+//				console.info(marked.bgText);
 			} else {
+				window.currentMarkupText = '';
+				window.currentMarkupBgText = '';
 				words.text = window.currentText
 			}
 		}
@@ -343,9 +349,13 @@ Page {
 					if (window.autoStoreWord) {
 						storedWordsModel.storeCurrentText()
 					}
+					if (window.currentMarkupBgText) {
+						blinker.start();
+					}
 				} else {
 					allowedOrientations = Orientation.All
 					upMenu.lockedScreen = false
+					blinker.stop();
 				}
 			}
 
@@ -360,6 +370,43 @@ Page {
 
 				horizontalAlignment: Text.AlignHCenter
 				verticalAlignment: Text.AlignVCenter
+				z: 2
+			}
+
+			Label {
+				id: bgWords
+				anchors.fill: parent
+				wrapMode: Text.WordWrap
+				color: window.textColor()
+				font.bold: true
+				lineHeight: 0.96
+
+				horizontalAlignment: Text.AlignHCenter
+				verticalAlignment: Text.AlignVCenter
+				z: 1
+				visible: false
+			}
+			Timer {
+				id: blinker
+				running: false
+				repeat: true
+				interval: 500
+				onTriggered: {
+					if (!bgWords.visible) {
+						bgWords.visible = true
+						bgWords.text = window.currentMarkupBgText;
+						bgWords.font.pixelSize = words.font.pixelSize
+					}
+					if (wordsBox.height === mainPage.height) {
+						words.visible = !words.visible;
+					}
+				}
+				onRunningChanged: {
+					if (!running) {
+						words.visible = true;
+						bgWords.visible = false;
+					}
+				}
 			}
 		}
 
@@ -452,7 +499,7 @@ Page {
 				var testHW = (h + w) * 1.2
 
 				if (window.markupWord) {
-					hiddenText.text = Markup.marked(window.currentText);
+					hiddenText.text = Markup.marked(window.currentText).text;
 				} else {
 					hiddenText.text = window.currentText;
 				}

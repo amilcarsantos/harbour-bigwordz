@@ -31,16 +31,37 @@
 .pragma library
 
 function marked(src) {
-	var out = "";
-	var srcBak = src;
+	var out = {
+		text: '',
+		bgText: '',
+		append: function(txt, bgTxt) {
+			if (bgTxt) {
+				if (this.bgText) {
+					this.bgText += bgTxt;
+				} else {
+					this.bgText = this.text + bgTxt;
+				}
+			} else if (this.bgText) {
+				this.bgText += txt;
+			}
+			this.text += txt;
+		}
+	};
+	var srcBak = {
+		text: src,
+		bgText: undefined
+	};
 
-	var escape	= /([^\*\/_\\]*)/;
-	var bold4	= /^\*\*\*\*([\s\S]+?)\*\*\*\*(?!\*)/;
-	var bold3	= /^\*\*\*([\s\S]+?)\*\*\*(?!\*)/;
-	var bold2	= /^\*\*([\s\S]+?)\*\*(?!\*)/;
-	var italic	= /^\/\/([\s\S]+?)\/\/(?!\/)/;
-	var underlin = /^__([\s\S]+?)__(?!_)/;
-	var newline = "\\\\\\";
+	var escape	= /([^\*\/_\\#\:]*)/;
+	var bold4	= /^\*{4}([\s\S]+?)\*{4}(?!\*)/;
+	var bold3	= /^\*{3}([\s\S]+?)\*{3}(?!\*)/;
+	var bold2	= /^\*{2}([\s\S]+?)\*{2}(?!\*)/;
+	var italic	= /^\/{2}([\s\S]+?)\/{2}(?!\/)/;
+	var color	= /^#([\d\w ]+?)#([\s\S]+?)##(?!#)/;
+	var colorIdx	= ['00','1C','38','55','71','8E','AA','C6','E3','FF'];
+	var blink	= /^\:{2}([\s\S]+?)\:{2}(?!\:)/;
+	var underlin	= /^__([\s\S]+?)__(?!_)/;
+	var newline	= '\\\\\\';
 
 	try {
 		var cap;
@@ -49,59 +70,125 @@ function marked(src) {
 			cap = escape.exec(src);
 			if (cap) {
 				src = src.substring(cap[0].length);
-				out += cap[1];
+				out.append(cap[1]);
 			}
 
-			if (src) {
-				if (src.charAt(0) === '*') {
-					cap = bold4.exec(src);
-					if (cap) {
-						src = src.substring(cap[0].length);
-						out +=  '<font size="6">' + cap[1] + '</font>';
-						continue;
-					}
-					cap = bold3.exec(src);
-					if (cap) {
-						src = src.substring(cap[0].length);
-						out +=  '<font size="5">' + cap[1] + '</font>';
-						continue;
-					}
-					cap = bold2.exec(src);
-					if (cap) {
-						src = src.substring(cap[0].length);
-						out +=  '<font size="4">' + cap[1] + '</font>';
-						continue;
-					}
-				} else {
-//					print(src);
-					if (src.indexOf(newline) === 0) {
-						src = src.substring(newline.length);
-						out += "<br>";
-						continue;
-					}
-					cap = italic.exec(src);
-					if (cap) {
-						src = src.substring(cap[0].length);
-						out +=  '<i>' + cap[1] + '</i>';
-						continue;
-					}
-					cap = underlin.exec(src);
-					if (cap) {
-						src = src.substring(cap[0].length);
-						out +=  '<u>' + cap[1] + '</u>';
-						continue;
-					}
+			if (!src) {
+				break;
+			}
+			switch (src.charAt(0)) {
+			case '*':
+				cap = bold4.exec(src);
+				if (cap) {
+					src = src.substring(cap[0].length);
+					out.append('<font size="6">' + cap[1] + '</font>');
+					continue;
 				}
+				cap = bold3.exec(src);
+				if (cap) {
+					src = src.substring(cap[0].length);
+					out.append('<font size="5">' + cap[1] + '</font>');
+					continue;
+				}
+				cap = bold2.exec(src);
+				if (cap) {
+					src = src.substring(cap[0].length);
+					out.append('<font size="4">' + cap[1] + '</font>');
+					continue;
+				}
+				break;
+			case '\\':
+				if (src.indexOf(newline) === 0) {
+					src = src.substring(newline.length);
+					out.append('<br>');
+					continue;
+				}
+				break;
+			case '/':
+				cap = italic.exec(src);
+				if (cap) {
+					src = src.substring(cap[0].length);
+					out.append('<i>' + cap[1] + '</i>');
+					continue;
+				}
+				break;
+			case '_':
+				cap = underlin.exec(src);
+				if (cap) {
+					src = src.substring(cap[0].length);
+					out.append('<u>' + cap[1] + '</u>');
+					continue;
+				}
+				break;
+			case ':':
+				cap = blink.exec(src);
+				if (cap) {
+					src = src.substring(cap[0].length);
+					out.append(cap[1], '<font color="transparent">' + cap[1] + '</font>');
+					continue;
+				}
+				break;
+			case '#':
+				cap = color.exec(src);
+				if (cap) {
+					src = src.substring(cap[0].length);
+					var colorVal = cap[1];
+					var text = cap[2];
+//						print(colorVal);
+					if (colorVal.length === 3 && colorVal[0] >= '0' && colorVal[0] <= '9') {
+						var colorHash = '#';
+						for (var c = 0; c < 3; c++) {
+							var idx = colorVal[c] - '0';
+							if (idx >= 0 && idx <= 9) {
+								colorHash += colorIdx[idx];
+							}
+						}
+						if (colorHash.length === 7) {
+							colorVal = colorHash;
+						} else {
+							colorVal = '';
+						}
+					} else if (colorVal === 'rnd_ltrs' && text.length <= 24) {
+						colorVal = '';
+						var textOut = ""
+						var code = 32;
+						for (var i = 0, t = text.length; i < t; i++) {
+							if (text.charAt(i) == ' ') {
+								textOut += ' ';
+								code = 32;
+							} else {
+								var colorHash = '#';
+								var tc = text.charCodeAt(i);
+								colorHash += colorIdx[((tc * (4 + i + code)) % 7) + 3];
+								colorHash += colorIdx[((tc * (5 + i + code)) % 7) + 3];
+								colorHash += colorIdx[((tc * (2 + i + code)) % 7) + 3];
+								textOut += '<font color="' + colorHash + '">' + text.charAt(i) + '</font>';
+								code = tc;
+							}
+						}
+						text = textOut;
+					}
+					if (colorVal) {
+						out.append('<font color="' + colorVal + '">' + text + '</font>');
+					} else {
+						out.append(text);
+					}
 
-				// not a markup...
-				out += src.charAt(0);
-				src = src.substring(1);
+					continue;
+				}
+				break;
+			default:
+				console.error('BUG?',src.charAt(0));
 			}
+
+			// not a markup...
+			out.append(src.charAt(0));
+			src = src.substring(1);
 		}
 	} catch(e) {
 		console.log("error: " + e)
 		out = srcBak;
 	}
-//	print(out);
+//	print(out.text);
 	return out;
 }

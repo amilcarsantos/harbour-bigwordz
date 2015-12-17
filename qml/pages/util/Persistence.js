@@ -25,7 +25,7 @@ function setting(settingName, defaultValue) {
 	database().readTransaction(function(tx) {
 		var rs = tx.executeSql('SELECT * FROM settings WHERE setting=?', [settingName])
 		if (rs.rows.length > 0) {
-			value = rs.rows.item(0).value
+			value = rs.rows.item(0).value || '';
 		}
 	});
 //	console.log("setting '" + settingName + "' value: " + value);
@@ -68,7 +68,7 @@ function setSetting(settingName, value) {
 		}
 	});
 	// The function returns "OK" if it was successful, or "Error" if it wasn't
-//	console.log("setSetting '" + setting + "' result: " + res);
+//	console.log("setSetting '" + settingName + "' result: " + res);
 	return res;
 }
 
