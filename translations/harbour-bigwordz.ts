@@ -58,127 +58,136 @@
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="90"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="111"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="91"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="112"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="94"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="115"/>
         <source>Appearance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="101"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="122"/>
         <source>Text colors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="108"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="129"/>
         <source>Theme colors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="117"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="138"/>
         <source>Black and white</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="126"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="147"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="170"/>
         <source>Customize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="135"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="156"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="179"/>
         <source>Text color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="142"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="163"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="186"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="192"/>
         <source>Background</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="147"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="198"/>
+        <source>Direction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SettingsDialog.qml" line="211"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="151"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="215"/>
         <source>Start with latest stored word</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="152"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="216"/>
         <source>Next restart the initial word is the latest stored word</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="157"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="221"/>
         <source>Store words automatically</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="158"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="222"/>
         <source>Store words when switching to full screen or only by the pull up menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="163"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="227"/>
         <source>Enable short text styling markup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="164"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="228"/>
         <source>Allows usage of symbols to apply style to the text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="169"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="233"/>
         <source>Double tap to toggle full screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="170"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="234"/>
         <source>Double tap over the words to switch between edit mode and full screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="175"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="239"/>
         <source>Toggle full screen with sensors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="176"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="240"/>
         <source>Set the screen vertically to switch from edit mode to full screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="193"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="257"/>
         <source>Slowest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="196"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="260"/>
         <source>Slower</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="199"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="263"/>
         <source>Fastest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="202"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="266"/>
         <source>Faster</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsDialog.qml" line="204"/>
+        <location filename="../qml/pages/SettingsDialog.qml" line="268"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>

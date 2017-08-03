@@ -25,6 +25,8 @@ OTHER_FILES += qml/harbour-bigwordz.qml \
 	qml/pages/util/ColorPickerButton.qml \
 	qml/pages/util/ColorSliderView.qml \
 	qml/pages/util/CompleterPopup.qml \
+	qml/pages/util/IconComboBox.qml \
+	qml/pages/util/IconMenuItem.qml \
 	qml/pages/util/TextFieldEx.qml \
 	qml/pages/util/ScreenBlank.qml \
 	qml/pages/util/FavoritesZone.qml \
@@ -42,4 +44,5 @@ CONFIG += sailfishapp_i18n
 TRANSLATIONS += translations/harbour-bigwordz-pt.ts \
 	translations/harbour-bigwordz-de.ts \
 	translations/harbour-bigwordz-zh.ts \
-	translations/harbour-bigwordz-fr.ts
+	translations/harbour-bigwordz-fr.ts \
+	translations/harbour-bigwordz-sv.ts

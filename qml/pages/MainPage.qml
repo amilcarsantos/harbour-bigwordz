@@ -359,6 +359,24 @@ Page {
 				}
 			}
 
+			Rectangle {
+				anchors.centerIn: parent
+				visible: window.customGradRotation() >= 0
+				width: window.customGradRotation() === 0? parent.width : parent.height
+				height: window.customGradRotation() === 0? parent.height : parent.width
+				rotation: window.customGradRotation()
+				gradient: Gradient {
+					GradientStop {
+						position: 0
+						color: window.backColor();
+					}
+					GradientStop {
+						position: 1
+						color: window.backColor2();
+					}
+				}
+			}
+
 			Label {
 				// actual displayed words
 				id: words
@@ -399,6 +417,7 @@ Page {
 					}
 					if (wordsBox.height === mainPage.height) {
 						words.visible = !words.visible;
+						bgWords.font.pixelSize = words.font.pixelSize;
 					}
 				}
 				onRunningChanged: {

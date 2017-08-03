@@ -52,6 +52,70 @@ function marked(src) {
 		bgText: undefined
 	};
 
+	var emojiMap = {
+		'<3': String.fromCharCode(0x2665),
+		':)': String.fromCharCode(0x263a),
+		':(': String.fromCharCode(0x2639),
+		':D': String.fromCharCode(0xD83D, 0xDE03),
+		':O': String.fromCharCode(0xD83D, 0xDE2E),
+		':o': String.fromCharCode(0xD83D, 0xDE2E),
+		':P': String.fromCharCode(0xD83D, 0xDE1B),
+		':p': String.fromCharCode(0xD83D, 0xDE1B),
+		':*': String.fromCharCode(0xD83D, 0xDE1A),
+		':|': String.fromCharCode(0xD83D, 0xDE10),
+		':\\': String.fromCharCode(0xD83D, 0xDE15),
+		':/': String.fromCharCode(0xD83D, 0xDE15),
+		';)': String.fromCharCode(0xD83D, 0xDE09),
+		';P': String.fromCharCode(0xD83D, 0xDE1C),
+		';p': String.fromCharCode(0xD83D, 0xDE1C),
+		'B)': String.fromCharCode(0xD83D, 0xDE0E)
+	}
+
+	function execEmoji(txt, singleReplace) {
+		var test = txt;
+		if (txt.indexOf(' ') > 1) {
+			test = txt.substring(0, txt.indexOf(' '));
+		}
+		if (singleReplace) {
+			if (test.length > 0 && test.length <= 2) {
+				for (var shortcut in emojiMap) {
+					if (shortcut === test) {
+						return {
+							symbol: emojiMap[shortcut],
+							remain: txt.substring(shortcut.length)
+						}
+					}
+				}
+			}
+			return;
+		} else {
+			if (test.length > 0 && txt.length >= 2) {
+				var out = '';
+				var words = txt.split(' ');
+				for (var idx in words) {
+					if (idx > 0) {
+						out = out + ' ';
+					}
+					test = words[idx];
+					var found = false;
+					if (test.length > 0 && test.length <= 2) {
+						for (var shortct in emojiMap) {
+							if (shortct === test) {
+								out = out + emojiMap[shortct];
+								found = true;
+							}
+						}
+					}
+					if (!found) {
+						out = out + test;
+					}
+				}
+				return out;
+			}
+		}
+		return txt;
+	}
+
 	var escape	= /([^\*\/_\\#\:]*)/;
 	var bold4	= /^\*{4}([\s\S]+?)\*{4}(?!\*)/;
 	var bold3	= /^\*{3}([\s\S]+?)\*{3}(?!\*)/;
@@ -70,7 +134,7 @@ function marked(src) {
 			cap = escape.exec(src);
 			if (cap) {
 				src = src.substring(cap[0].length);
-				out.append(cap[1]);
+				out.append(execEmoji(cap[1]));
 			}
 
 			if (!src) {
@@ -181,9 +245,15 @@ function marked(src) {
 				console.error('BUG?',src.charAt(0));
 			}
 
-			// not a markup...
-			out.append(src.charAt(0));
-			src = src.substring(1);
+			var emojiCap = execEmoji(src, true);
+			if (emojiCap) {
+				out.append(emojiCap.symbol);
+				src = emojiCap.remain;
+			} else {
+				// not a markup...
+				out.append(src.charAt(0));
+				src = src.substring(1);
+			}
 		}
 	} catch(e) {
 		console.log("error: " + e)

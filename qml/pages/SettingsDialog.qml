@@ -48,12 +48,20 @@ Dialog {
 			window.colorScheme = "custom"
 			window.customSchemeColors = textColorPicker.color.toString() + backColorPicker.color.toString()
 		}
+		if (customGradColors.checked) {
+			window.colorScheme = "customGrad"
+			window.customSchemeColors = textGradColorPicker.color.toString()
+					+ backGradColorPicker1.color.toString() + backGradColorPicker2.color.toString()
+					+ '<' + directionGradPicker.currentIndex
+		}
 		window.tap2toggle = tap2toggle.checked
 		window.useSensors = useSensors.checked
 		window.sensorsSensitivity = sensorsSensitivity.sliderValue
 		window.startWithStoredWord = startWithStoredWord.checked
 		window.autoStoreWord = autoStoreWord.checked
 		window.markupWord = markupWord.checked
+
+		//console.log(window.colorScheme, window.customSchemeColors);
 	}
 
 	SilicaFlickable {
@@ -71,13 +79,26 @@ Dialog {
 				customColors.checked = type === "custom"
 				textColorPicker.enabled = customColors.checked
 				backColorPicker.enabled = customColors.checked
+				customGradColors.checked = type === "customGrad"
+				textGradColorPicker.enabled = customGradColors.checked
+				backGradColorPicker1.enabled = customGradColors.checked
+				backGradColorPicker2.enabled = customGradColors.checked
+				directionGradPicker.enabled = customGradColors.checked
 			}
 
 			Component.onCompleted: {
 				var colorScheme = window.colorScheme
+				//console.log(colorScheme, window.customSchemeColors);
 				if (window.customSchemeColors) {
-					textColorPicker.color = window.customSchemeColors.substring(0,7)
-					backColorPicker.color = window.customSchemeColors.substring(7)
+					if (window.customSchemeColors.length <=14) {
+						textColorPicker.color = window.customSchemeColorAt(0)
+						backColorPicker.color = window.customSchemeColorAt(1)
+					} else {
+						textGradColorPicker.color = window.customSchemeColorAt(0)
+						backGradColorPicker1.color = window.customSchemeColorAt(1)
+						backGradColorPicker2.color = window.customSchemeColorAt(2)
+						directionGradPicker.currentIndex = parseInt(window.customSchemeColors.charAt(22));
+					}
 				}
 				if (colorScheme) {
 					column.setColorScheme(window.colorScheme)
@@ -141,6 +162,49 @@ Dialog {
 				x: Theme.itemSizeExtraSmall + Theme.paddingSmall
 				text: qsTr("Background")
 				color: 'black'
+			}
+
+			TextSwitch {
+				id: customGradColors
+				anchors.left: parent.left
+				text: qsTr("Customize")
+				automaticCheck: false
+				onClicked: {
+					column.setColorScheme("customGrad")
+				}
+			}
+			ColorPickerButton {
+				id: textGradColorPicker
+				x: Theme.itemSizeExtraSmall + Theme.paddingSmall
+				text: qsTr("Text color")
+				color: 'white'
+			}
+
+			ColorPickerButton {
+				id: backGradColorPicker1
+				x: Theme.itemSizeExtraSmall + Theme.paddingSmall
+				text: qsTr("Background")
+				color: 'black'
+			}
+			ColorPickerButton {
+				id: backGradColorPicker2
+				x: Theme.itemSizeExtraSmall + Theme.paddingSmall
+				text: qsTr("Background")
+				color: 'grey'
+			}
+			IconComboBox {
+				id: directionGradPicker
+				width: parent.width
+				label: qsTr("Direction")
+				currentIndex: 0
+				labelMargin: Theme.itemSizeExtraSmall + Theme.paddingSmall
+
+				menu: ContextMenu {
+					IconMenuItem { source: "icon-m-page-down" }
+					IconMenuItem { source: "icon-m-page-up"; rotation: 90 }
+					IconMenuItem { source: "icon-m-page-up" }
+					IconMenuItem { source: "icon-m-page-down"; rotation: 90 }
+				}
 			}
 
 			SectionHeader {

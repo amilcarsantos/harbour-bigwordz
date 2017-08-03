@@ -13,7 +13,7 @@ Name:       harbour-bigwordz
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Displays words on the screen in large letters.
-Version:    0.7
+Version:    0.8
 Release:    1
 Group:      Qt/Qt
 License:    BSD

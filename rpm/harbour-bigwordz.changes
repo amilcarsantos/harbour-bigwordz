@@ -1,6 +1,10 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* Wed Aug 03 2017 Amilcar Santos <amilcar.santos@gmail.com> 0.8-1
+ - new: short markup with emoji
+ - new: gradient background
+
 * Thu Dec 17 2015 Amilcar Santos <amilcar.santos@gmail.com> 0.7-1
  - new: short markup color styling (and 'rnd_ltrs' function)
  - new: short markup blink styling
@@ -40,7 +44,7 @@
  - fix: lines with '<' caracters in Stored Words page
 
 * Tue Jan 31 2014 Amilcar Santos <amilcar.santos@gmail.com> 0.2-1
- - new: toogle fullscreen with sensors
+ - new: toggle fullscreen with sensors
  - new: delete all stored words
 
 * Wed Jan 15 2014 Amilcar Santos <amilcar.santos@gmail.com> 0.1-1

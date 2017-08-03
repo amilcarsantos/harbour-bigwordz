@@ -38,7 +38,7 @@ ApplicationWindow
 {
 	id: window
 
-	property string version: "0.7"
+	property string version: "0.8"
 	property string appname: "Big Wordz"
 	property string appicon: "image://theme/harbour-bigwordz"
 	property string appurl:  "https://github.com/amilcarsantos/harbour-bigwordz"
@@ -63,8 +63,8 @@ ApplicationWindow
 	signal onForceTextUpdate
 
 	function textColor() {
-		if (colorScheme == "custom") {
-			return customSchemeColors.substring(0,7)
+		if (colorScheme == "custom" || colorScheme == "customGrad") {
+			return customSchemeColorAt(0)
 		}
 		if (colorScheme == "blackWhite") {
 			return 'white'
@@ -74,12 +74,45 @@ ApplicationWindow
 
 	function backColor() {
 		if (colorScheme == "custom") {
-			return customSchemeColors.substring(7)
+			return customSchemeColorAt(1)
+		}
+		if (colorScheme == "customGrad") {
+			var direction = customSchemeColors.substring(22);
+			if (direction === '1' || direction === '2') {
+				return customSchemeColorAt(2);
+			}
+			return customSchemeColorAt(1);
 		}
 		if (colorScheme == "blackWhite") {
 			return 'black'
 		}
 		return 'transparent'
+	}
+
+	function backColor2() {
+		if (colorScheme == "customGrad") {
+			var direction = customSchemeColors.substring(22);
+			if (direction === '1' || direction === '2') {
+				return customSchemeColorAt(1);
+			}
+			return customSchemeColorAt(2)
+		}
+		return 'black'
+	}
+
+	function customGradRotation() {
+		if (colorScheme == "customGrad") {
+			var direction = customSchemeColors.substring(22);
+			if (direction === '1' || direction === '3') {
+				return 90;
+			}
+			return 0;
+		}
+		return -1;
+	}
+
+	function customSchemeColorAt(index) {
+		return customSchemeColors.substring(index * 7, (index + 1) * 7)
 	}
 
 	function storedWords() {
@@ -208,7 +241,7 @@ ApplicationWindow
 			currentText = storedWordsModel.lastStoredWord()
 		}
 		if (currentText === "") {
-			currentText = "#rnd_ltrs#Hello##"	// fallback to 'Hello'
+            currentText = "#rnd_ltrs#Hello## :)"	// fallback to 'Hello'
 		}
 		initialUpdate()
 		_set = true
